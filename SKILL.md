@@ -1,7 +1,7 @@
 ---
 name: data-modeling-skill
-version: 1.0.0
 description: Trigger this skill when user ask data warehouse modeling designs; layered data modeling like medallion architecture, kimball, and Alibaba's OneData; and generates production-ready SQL code
+metadata: version: 1.0.0, Author: Jing Ge https://github.com/JingGe
 ---
 
 # Data Modeling
