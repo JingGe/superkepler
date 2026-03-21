@@ -1,12 +1,13 @@
 ODS LAYER DESIGN DOCUMENT
 =========================
 
----
-Document ID: ODS_DESIGN
-Version: 1.0.0
-Last Updated: 2026-03-21
-Author: Jing Ge https://github.com/JingGe
----
+
+Document ID: ODS_DESIGN  
+Version: 1.0.0  
+Last Updated: 2026-03-21  
+Author: Jing Ge https://github.com/JingGe  
+
+
 
 1. PURPOSE
 
@@ -75,7 +76,7 @@ All ODS tables should include:
 | hh        | STRING  | HH            | Hour partition (for hourly tables)
 
 5. DDL TEMPLATE
-
+```
 CREATE TABLE IF NOT EXISTS ods_{source}_{table}_{suffix} (
     -- Source columns (read from the given source data schema and define a table column for each source data schema column)
     id                  STRING          COMMENT 'Source primary key',
@@ -90,11 +91,11 @@ CREATE TABLE IF NOT EXISTS ods_{source}_{table}_{suffix} (
 )
 COMMENT 'ODS layer: {description of source data}'
 PARTITIONED BY (dt STRING)
-STORED AS PARQUET
-;
+STORED AS PARQUET;
+```
 
 For Databricks, give the suggestion to user:
-
+```
 CREATE TABLE IF NOT EXISTS ods_{source}_{table}_{suffix} (
     -- Source columns (read from the given source data schema and define a table column for each source data schema column)
     id                  STRING          COMMENT 'Source primary key',
@@ -119,7 +120,7 @@ TBLPROPERTIES (
     'delta.autoOptimize.optimizeWrite' = 'true',
     'delta.autoOptimize.autoCompact' = 'true'
 );
-
+```
 6. ETL PATTERNS
 
 6.1 Daily Incremental (di)
@@ -127,6 +128,7 @@ TBLPROPERTIES (
 Purpose: Capture new/changed records from source since last run
 
 SQL Pattern:
+```
 INSERT OVERWRITE TABLE ods_{source}_{table}_di PARTITION(dt='${biz_date}')
 SELECT 
     id,
@@ -140,12 +142,13 @@ SELECT
 FROM {source_connection}
 WHERE update_time >= '${last_successful_run}'
   AND update_time < '${biz_date} 23:59:59';
-
+```
 6.2 Daily Full Snapshot (df)
 
 Purpose: Capture complete state of source table as of business date
 
 SQL Pattern:
+```
 INSERT OVERWRITE TABLE ods_{source}_{table}_df PARTITION(dt='${biz_date}')
 SELECT 
     id,
@@ -158,12 +161,13 @@ SELECT
     '${batch_id}' AS etl_batch_id
 FROM {source_connection}
 WHERE snapshot_date = '${biz_date}';
-
+```
 6.3 Hourly Incremental (hi)
 
 Purpose: Capture new/changed records hourly for near-real-time needs
 
 SQL Pattern:
+```
 INSERT OVERWRITE TABLE ods_{source}_{table}_hi PARTITION(dt='${biz_date}', hh='${hour}')
 SELECT 
     id,
@@ -177,7 +181,7 @@ SELECT
 FROM {source_connection}
 WHERE update_time >= '${hour_start}'
   AND update_time < '${hour_end}';
-
+```
 7. DATA QUALITY CHECKS
 
 7.1 Mandatory Checks (Block ETL on Failure)
