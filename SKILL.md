@@ -1,7 +1,9 @@
 ---
 name: data-modeling-skill
 description: Trigger this skill when user ask data warehouse modeling designs; layered data modeling like medallion architecture, kimball, and Alibaba's OneData; and generates production-ready SQL code
-metadata: version: 1.0.0, Author: Jing Ge https://github.com/JingGe
+metadata: 
+  version: 1.0.0
+  Author: Jing Ge https://github.com/JingGe
 ---
 
 # Data Modeling
@@ -104,7 +106,7 @@ SQL GENERATION GUIDELINES:
 
   Step 2: Design Architecture
   Propose:
-  - Layer assignment
+  - Layer assignment(after identifying the layers, only load related design md file from the references. Don't loadd all of them.)
   - Table name (following naming convention)
   - Columns and data types
   - Partition strategy
