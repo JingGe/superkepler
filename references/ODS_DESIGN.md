@@ -1,18 +1,18 @@
 ODS LAYER DESIGN DOCUMENT
 =========================
 
+---
 Document ID: ODS_DESIGN
 Version: 1.0.0
 Last Updated: 2026-03-21
 Author: Jing Ge https://github.com/JingGe
+---
 
 1. PURPOSE
-----------
 
 The ODS (Operational Data Store) layer serves as the data buffer zone that ingests and stores raw data from source systems with minimal processing, preserving data traceability and enabling data lineage tracking.
 
 2. RESPONSIBILITIES
--------------------
 
 2.1 Data Ingestion
 - Extract data from heterogeneous sources (MySQL, PostgreSQL, Oracle, MongoDB, APIs, Logs)
@@ -40,7 +40,6 @@ The ODS (Operational Data Store) layer serves as the data buffer zone that inges
 - Archive older data to cold storage per compliance requirements
 
 3. TABLE NAMING
----------------
 
 Pattern: ods_{source_system}_{table_name}_{suffix}
 
@@ -56,28 +55,26 @@ Examples:
 - ods_kafka_events_di
 
 4. TABLE STRUCTURE
-------------------
 
 4.1 Standard Columns
 
 All ODS tables should include:
 
-Column              Type        Description
---------------------------------------------------------------
-{source_columns}    Various     Original source columns (preserved)
-etl_create_time     TIMESTAMP   When record was ingested to ODS
-etl_source_system   STRING      Source system identifier
-etl_batch_id        STRING      ETL batch/job identifier
+| Column              | Type        | Description
+| --------------------| ------------| ------------------------------
+| {source_columns}    | Various     | Original source columns (preserved)
+| etl_create_time     | TIMESTAMP   | When record was ingested to ODS
+| etl_source_system   | STRING      | Source system identifier
+| etl_batch_id        | STRING      | ETL batch/job identifier
 
 4.2 Partition Column
 
-Column    Type    Format        Description
---------------------------------------------------------------
-dt        STRING  yyyy-MM-dd    Business date partition
-hh        STRING  HH            Hour partition (for hourly tables)
+| Column    | Type    | Format        | Description
+| ----------| --------| --------------| ------------------------------
+| dt        | STRING  | yyyy-MM-dd    | Business date partition
+| hh        | STRING  | HH            | Hour partition (for hourly tables)
 
 5. DDL TEMPLATE
----------------
 
 CREATE TABLE IF NOT EXISTS ods_{source}_{table}_{suffix} (
     -- Source columns (read from the given source data schema and define a table column for each source data schema column)
@@ -124,7 +121,6 @@ TBLPROPERTIES (
 );
 
 6. ETL PATTERNS
----------------
 
 6.1 Daily Incremental (di)
 
@@ -183,37 +179,34 @@ WHERE update_time >= '${hour_start}'
   AND update_time < '${hour_end}';
 
 7. DATA QUALITY CHECKS
-----------------------
 
 7.1 Mandatory Checks (Block ETL on Failure)
 
-Check                   Threshold       Action
---------------------------------------------------------------
-Null primary keys       0%              Block & Alert
-Duplicate primary keys  0%              Block & Alert
-Schema mismatch         0%              Block & Alert
-Partition completeness  100%            Block & Alert
+| Check                   | Threshold       | Action
+| ------------------------| ----------------| ----------------------
+| Null primary keys       | 0%              | Block & Alert
+| Duplicate primary keys  | 0%              | Block & Alert
+| Schema mismatch         | 0%              | Block & Alert
+| Partition completeness  | 100%            | Block & Alert
 
 7.2 Warning Checks (Alert Only)
 
-Check                   Threshold       Action
---------------------------------------------------------------
-Null rate per column    < 5%            Alert
-Data volume deviation   +/- 30%         Alert
-Late arriving data      > 2 hours       Alert
+| Check                   | Threshold       | Action
+| ------------------------| ----------------| ----------------------
+| Null rate per column    | < 5%            | Alert
+| Data volume deviation   | +/- 30%         | Alert
+| Late arriving data      | > 2 hours       | Alert
 
 8. RETENTION POLICY
--------------------
 
-Data Age            Storage Tier      Access Pattern
---------------------------------------------------------------
-0-3 months          Hot (SSD)         Frequent queries
-3-6 months          Warm (HDD)        Occasional queries
-6-12 months         Cold (Archive)    Audit/Compliance
-> 12 months         Deleted           Unless compliance requires
+| Data Age            | Storage Tier      | Access Pattern
+| --------------------| ------------------| ------------------------
+| 0-3 months          | Hot (SSD)         | Frequent queries
+| 3-6 months          | Warm (HDD)        | Occasional queries
+| 6-12 months         | Cold (Archive)    | Audit/Compliance
+| > 12 months         | Deleted           | Unless compliance requires
 
 9. MONITORING & ALERTING
-------------------------
 
 9.1 Metrics to Track
 
@@ -225,16 +218,15 @@ Data Age            Storage Tier      Access Pattern
 
 9.2 Alert Thresholds
 
-Condition                       Severity    Notification
---------------------------------------------------------------
-ETL job failure                 Critical    Page on-call
-Data freshness > 4 hours        High        Slack + Email
-Data volume deviation > 50%     High        Slack + Email
-Null rate > 10% on key column   Medium      Email
-Small file count > 1000         Medium      Email
+| Condition                       | Severity    | Notification
+| --------------------------------| ------------| ------------------
+| ETL job failure                 | Critical    | Page on-call
+| Data freshness > 4 hours        | High        | Slack + Email
+| Data volume deviation > 50%     | High        | Slack + Email
+| Null rate > 10% on key column   | Medium      | Email
+| Small file count > 1000         | Medium      | Email
 
 10. BEST PRACTICES
-------------------
 
 DO:
 - Preserve original field names from source
@@ -243,6 +235,7 @@ DO:
 - Keep audit trail with ETL metadata columns
 - Document source system and table in comments
 - Implement idempotent ETL jobs
+- Suggest data platform specific optimization SQL syntax
 
 DON'T:
 - Apply business logic or transformations
@@ -253,7 +246,6 @@ DON'T:
 - Mix data from multiple sources in one ODS table
 
 11. COMMON PITFALLS
--------------------
 
 Pitfall: Schema Drift
 Solution: Implement schema evolution detection; alert on changes
@@ -268,7 +260,6 @@ Pitfall: Partition Explosion
 Solution: Use appropriate granularity; archive old partitions
 
 12. RELATED DOCUMENTS
----------------------
 
 - docs/layers/DWD_DESIGN.md - Downstream layer specifications
 - docs/standards/NAMING_CONVENTION.md - Naming standards
