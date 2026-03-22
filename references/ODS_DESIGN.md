@@ -76,7 +76,8 @@ All ODS tables should include:
 | hh        | STRING  | HH            | Hour partition (for hourly tables)
 
 5. DDL TEMPLATE
-```
+
+```sql
 CREATE TABLE IF NOT EXISTS ods_{source}_{table}_{suffix} (
     -- Source columns (read from the given source data schema and define a table column for each source data schema column)
     id                  STRING          COMMENT 'Source primary key',
@@ -95,7 +96,8 @@ STORED AS PARQUET;
 ```
 
 For Databricks, give the suggestion to user:
-```
+
+```sql
 CREATE TABLE IF NOT EXISTS ods_{source}_{table}_{suffix} (
     -- Source columns (read from the given source data schema and define a table column for each source data schema column)
     id                  STRING          COMMENT 'Source primary key',
@@ -128,7 +130,7 @@ TBLPROPERTIES (
 Purpose: Capture new/changed records from source since last run
 
 SQL Pattern:
-```
+```sql
 INSERT OVERWRITE TABLE ods_{source}_{table}_di PARTITION(dt='${biz_date}')
 SELECT 
     id,
@@ -148,7 +150,7 @@ WHERE update_time >= '${last_successful_run}'
 Purpose: Capture complete state of source table as of business date
 
 SQL Pattern:
-```
+```sql
 INSERT OVERWRITE TABLE ods_{source}_{table}_df PARTITION(dt='${biz_date}')
 SELECT 
     id,
@@ -167,7 +169,7 @@ WHERE snapshot_date = '${biz_date}';
 Purpose: Capture new/changed records hourly for near-real-time needs
 
 SQL Pattern:
-```
+```sql
 INSERT OVERWRITE TABLE ods_{source}_{table}_hi PARTITION(dt='${biz_date}', hh='${hour}')
 SELECT 
     id,
