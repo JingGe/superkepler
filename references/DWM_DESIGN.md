@@ -70,7 +70,7 @@ Examples:
 | create_time         | TIMESTAMP   | Business event timestamp
 | etl_time            | TIMESTAMP   | ETL processing timestamp
 
-4.2 Partition Column((ignore if use delta lake with ligquid clustering))
+4.2 Partition Column(ignore if use delta lake with ligquid clustering)
 
 | Column    | Type    | Format        | Description
 | ----------| --------| --------------| ------------------------------
@@ -343,17 +343,17 @@ DON'T:
 13. COMMON PITFALLS
 
 
-Pitfall: Logic Duplication
-Solution: Centralize business logic in DWM; reference from DWS
+Pitfall: Logic Duplication  
+Solution: Centralize business logic in DWM; reference from DWS  
 
-Pitfall: Over-Engineering
-Solution: Only create DWM when complexity justifies it
+Pitfall: Over-Engineering  
+Solution: Only create DWM when complexity justifies it  
 
-Pitfall: Unclear Ownership
-Solution: Assign business logic ownership to domain teams
+Pitfall: Unclear Ownership  
+Solution: Assign business logic ownership to domain teams  
 
-Pitfall: Version Drift
-Solution: Version business logic; document changes
+Pitfall: Version Drift  
+Solution: Version business logic; document changes  
 
 14. RELATED DOCUMENTS
 

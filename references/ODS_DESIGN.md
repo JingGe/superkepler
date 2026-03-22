@@ -252,17 +252,17 @@ DON'T:
 
 11. COMMON PITFALLS
 
-Pitfall: Schema Drift
-Solution: Implement schema evolution detection; alert on changes
+Pitfall: Schema Drift  
+Solution: Implement schema evolution detection; alert on changes  
 
-Pitfall: Late Arriving Data
-Solution: Allow reprocessing window (T+2); document cutoff times
+Pitfall: Late Arriving Data  
+Solution: Allow reprocessing window (T+2); document cutoff times  
 
-Pitfall: Small Files
-Solution: Configure file merge; target > 128MB per file
+Pitfall: Small Files  
+Solution: Configure file merge; target > 128MB per file  
 
-Pitfall: Partition Explosion
-Solution: Use appropriate granularity; archive old partitions
+Pitfall: Partition Explosion  
+Solution: Use appropriate granularity; archive old partitions  
 
 12. RELATED DOCUMENTS
 

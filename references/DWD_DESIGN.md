@@ -400,17 +400,17 @@ DON'T:
 
 13. COMMON PITFALLS
 
-Pitfall: Dimension Join Explosion
-Solution: Verify dimension cardinality before joining; use broadcast for small dims
+Pitfall: Dimension Join Explosion  
+Solution: Verify dimension cardinality before joining; use broadcast for small dims  
 
-Pitfall: Late Arriving Dimensions
-Solution: Implement late-arriving dimension handling; allow reprocessing
+Pitfall: Late Arriving Dimensions  
+Solution: Implement late-arriving dimension handling; allow reprocessing  
 
-Pitfall: Inconsistent Business Logic
-Solution: Centralize business rules in documented SQL templates
+Pitfall: Inconsistent Business Logic  
+Solution: Centralize business rules in documented SQL templates  
 
-Pitfall: Data Skew on Join Keys
-Solution: Add salt to skewed keys; use skew join optimization
+Pitfall: Data Skew on Join Keys  
+Solution: Add salt to skewed keys; use skew join optimization  
 
 14. RELATED DOCUMENTS
 
