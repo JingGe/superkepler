@@ -338,7 +338,7 @@ LEFT JOIN dim_user_his d
 9.2 Snapshot DIM Reference
 
 For daily snapshot dimensions:
-
+```sql
 SELECT 
     f.order_id,
     d.user_name,
@@ -347,6 +347,7 @@ FROM dwd_fact f
 LEFT JOIN dim_user_df d 
     ON f.user_id = d.user_id 
     AND f.dt = d.dt;
+```
 
 10. RETENTION POLICY
 
@@ -384,11 +385,14 @@ DO:
 - Document all transformation rules
 - Use idempotent ETL jobs
 - Handle NULLs with COALESCE
+- Flatten dimensions as much as possible in the DWD
 - Validate business rules before loading
+- Enable Change Data Feed (CDF) to allow downstream DWS tables to process only changes.
+- Run VACUUM and OPTIMIZE regularly to manage storage costs and performance.
 
 DON'T:
 - Aggregate in DWD (do in DWM/DWS)
-- Create snowflake schemas
+- Create snowflake schemas and "deep" joins
 - Leave logic undocumented
 - Create non-reproducible jobs
 - Skip dimension joins
