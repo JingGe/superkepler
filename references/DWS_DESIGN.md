@@ -239,7 +239,15 @@ GROUP BY user_id;
 
 For Databricks, give the suggestion to replace PARTITION(dt) with USING DELTA CLUSTER BY (dt, user_id)
 
-6.4 SQL Performance optimization with Databricks
+6.5 7d/30d/90d rolling windows optimization
+
+Give suggestion that, for the 7d/30d/90d rolling windows, do not build them all on day one.
+
+- Start with the 1d table.
+- Create Materialized Views in Databricks for the 7d and 30d logic.
+- Only "physicalize" them into a DWS table if the Materialized View is too slow for the BI dashboard. This saves massive amounts of compute and storage.
+
+6.6 SQL Performance optimization with Databricks
 
 Give skill-users the following suggestions if Databricks is used and performance improvement is required. 
 
