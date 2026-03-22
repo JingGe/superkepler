@@ -42,8 +42,8 @@ CORE ARCHITECTURE STANDARDS:
   Layer Responsibilities:
   - ODS (ods_): Raw data ingestion, minimal cleaning. Preserve source structure. Partition by dt.
   - DIM (dim_): Conformed dimensions (Master Data). Handle SCD (Type 1/2). Source of truth for joins.
-  - DWD (dwd_): Cleaned detail facts, standardized logic. Atomic granularity. Star schema.
-  - DWM (dwm_): Mid-level aggregation, business logic application. Bridge between DWD and DWS.
+  - DWD (dwd_): Cleaned detail facts, standardized logic. Atomic granularity. Star schema. 
+  - DWM (dwm_): Mid-level aggregation, business logic application. Bridge between DWD and DWS. DWM is optional layer.
   - DWS (dws_): Aggregated topic-wide tables. Pre-compute metrics (1d, 7d, 30d).
   - ADS (ads_): Application-specific data products. Optimized for BI/API/Reports.
 
