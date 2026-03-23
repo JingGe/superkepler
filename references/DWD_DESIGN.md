@@ -38,7 +38,7 @@ The DWD (Data Warehouse Detail) layer transforms ODS data into clean, standardiz
 - Document data classification levels
 
 3. TABLE NAMING
----------------
+
 
 Pattern: dwd_{domain}_{entity}_{suffix}
 
@@ -415,6 +415,7 @@ Solution: Add salt to skewed keys; use skew join optimization
 14. RELATED DOCUMENTS
 
 - docs/layers/ODS_DESIGN.md - Upstream layer specifications
+- docs/layers/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - docs/layers/DWM_DESIGN.md - Downstream layer specifications
 - docs/layers/DIM_DESIGN.md - Dimension table specifications
 - docs/standards/NAMING_CONVENTION.md - Naming standards

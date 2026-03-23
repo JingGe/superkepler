@@ -359,6 +359,7 @@ Solution: Version business logic; document changes
 
 
 - docs/layers/DWD_DESIGN.md - Upstream layer specifications
+- docs/layers/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - docs/layers/DWS_DESIGN.md - Downstream layer specifications
 - docs/standards/NAMING_CONVENTION.md - Naming standards
 - docs/standards/BUSINESS_LOGIC.md - Business logic documentation standards

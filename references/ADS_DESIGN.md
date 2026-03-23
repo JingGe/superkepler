@@ -503,7 +503,6 @@ To prevent the "Broken Dashboard" syndrome, ADS employs a Blue-Green Deployment:
 
 
 - docs/layers/DWS_DESIGN.md - Upstream layer specifications
+- docs/layers/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - docs/standards/NAMING_CONVENTION.md - Naming standards
-- docs/standards/SLA_DEFINITIONS.md - SLA standards
-- docs/operations/MONITORING.md - Monitoring guidelines
-- docs/security/ACCESS_CONTROL.md - Access control standards
+- docs/standards/SQL_STANDARDS.md - SQL coding standards
