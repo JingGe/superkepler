@@ -1,5 +1,5 @@
 # data-warehouse-modeling-skill
-Agent skill for design and building layered data warehouse modeling.
+Agent skill for data modeling, i.e. design and building layered data warehouse model.
 
 This Data Modeling skill enables the design of structured, scalable, and efficient data schemas aligned with the layered data warehouse architecture (ODS, DWD, DWM, DWS, ADS). This skill translates business requirements into logical and physical data models, ensuring data integrity, query performance, and maintainability. It encompasses dimensional modeling, normalization, slowly changing dimension (SCD) strategies, and grain definition.
 
@@ -26,18 +26,7 @@ Use this skill in the following scenarios:
 8. Data Mart Creation: When building subject-area specific data marts for specific departments (Finance, Marketing, Operations).
 9. Refactoring: When cleaning up technical debt, inconsistent metrics, or redundant tables in the warehouse.
 
-## REFERENCE DOCUMENTS:
-
-Always consult these documents when making design decisions:
-  - docs/layers/ODS_DESIGN.md - ODS layer specifications
-  - docs/layers/DWD_DESIGN.md - DWD layer specifications
-  - docs/layers/DWM_DESIGN.md - DWM layer specifications
-  - docs/layers/DWS_DESIGN.md - DWS layer specifications
-  - docs/layers/ADS_DESIGN.md - ADS layer specifications
-  - docs/standards/NAMING_CONVENTION.md - Naming standards
-  - docs/standards/SQL_STANDARDS.md - SQL coding standards
-
-CORE ARCHITECTURE STANDARDS:
+## CORE ARCHITECTURE STANDARDS:
 
   Layer Responsibilities:
   - ODS (ods_): Raw data ingestion, minimal cleaning. Preserve source structure. Partition by dt.
@@ -46,3 +35,43 @@ CORE ARCHITECTURE STANDARDS:
   - DWM (dwm_): Mid-level aggregation, business logic application. Bridge between DWD and DWS.
   - DWS (dws_): Aggregated topic-wide tables. Pre-compute metrics (1d, 7d, 30d).
   - ADS (ads_): Application-specific data products. Optimized for BI/API/Reports.
+
+## Installation
+
+You can integrate this skill into your Claude environment using one of the methods below.
+
+### Method 1: Claude Code CLI (Recommended)
+This is the fastest way to keep the skill updated via the command line.
+
+1. **Add the repository as a marketplace:**
+   ```bash
+   claude plugin marketplace add JingGe/data-modeling
+   ```
+
+2. **Install the skill:**
+   ```bash
+   claude plugin install data-modeling@JingGe
+   ```
+
+### Method 3: Manual Installation
+
+If you prefer to manage the files locally:
+
+ 1. Clone the repository:
+    ```bash
+    git clone [https://github.com/JingGe/data-modeling.git](https://github.com/JingGe/data-modeling.git)
+    ```
+
+ 2. Move to your global skills directory:
+    ```bash
+    mkdir -p ~/.claude/skills/
+    cp -r data-modeling-skill ~/.claude/skills/
+    ```
+
+### Usage
+
+Once installed, Claude will automatically leverage these instructions when you ask data-related questions. You can also trigger it explicitly:
+
+ - Natural Language: "Using my data modeling skill, design a Snowflake schema for a retail analytics dashboard."
+
+ - Slash Command: /data-modeling Create a DWD layer design for the given data source.
