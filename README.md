@@ -53,13 +53,43 @@ This is the fastest way to keep the skill updated via the command line.
    claude plugin install data-modeling@JingGe
    ```
 
+### Method 2: /plugin in Claude Code  (Recommended)
+
+To install a skill from a GitHub repo using the slash command, follow these steps:
+ 1. Add the Repository as a Marketplace
+
+ Claude Code needs to index the repository first. Run this command inside your terminal session:
+    ```bash
+    /plugin marketplace add JingGe/data-modeling-skill
+    ```
+
+ 2. Install the Skill
+
+ Once added, you install the specific plugin from that marketplace:
+Bash
+
+    ```bash
+    /plugin install data-modeling-skill@JingGe
+    ```
+
+ (The @JingGe suffix ensures you are pulling from the correct marketplace alias).
+
+ 3. Activate the Skill
+
+ For the changes to take effect immediately without restarting the CLI:
+Bash
+
+    ```bash
+    /reload-plugins
+    ```
+
 ### Method 3: Manual Installation
 
 If you prefer to manage the files locally:
 
  1. Clone the repository:
     ```bash
-    git clone [https://github.com/JingGe/data-modeling.git](https://github.com/JingGe/data-modeling.git)
+    git clone https://github.com/JingGe/data-modeling.git
     ```
 
  2. Move to your global skills directory:
@@ -70,8 +100,10 @@ If you prefer to manage the files locally:
 
 ### Usage
 
-Once installed, Claude will automatically leverage these instructions when you ask data-related questions. You can also trigger it explicitly:
+Once installed, Claude code will automatically leverage these instructions when you ask data-related questions. You can also trigger it explicitly:
 
  - Natural Language: "Using my data modeling skill, design a Snowflake schema for a retail analytics dashboard."
 
  - Slash Command: /data-modeling Create a DWD layer design for the given data source.
+
+ - Slash only: /data-modeling. Then you use natural language to ask the skill to design data modeling or generate SQL scripts
