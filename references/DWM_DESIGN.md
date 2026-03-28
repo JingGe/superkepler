@@ -358,8 +358,8 @@ Solution: Version business logic; document changes
 14. RELATED DOCUMENTS
 
 
-- docs/layers/DWD_DESIGN.md - Upstream layer specifications
-- docs/layers/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
-- docs/layers/DWS_DESIGN.md - Downstream layer specifications
-- docs/standards/NAMING_CONVENTION.md - Naming standards
-- docs/standards/BUSINESS_LOGIC.md - Business logic documentation standards
+- references/DWD_DESIGN.md - Upstream DWD layer specifications
+- references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
+- references/DWS_DESIGN.md - Downstream DWS layer specifications
+- references/NAMING_CONVENTION.md - Naming standards
+- references/SQL_STANDARDS.md - SQL coding standards

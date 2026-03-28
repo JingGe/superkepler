@@ -843,9 +843,9 @@ SOLUTION: Implement broadcast hints; consider mini-dimensions; optimize partitio
 15. RELATED DOCUMENTS
 
 
-- docs/layers/ODS_DESIGN.md - Upstream source specifications
-- docs/layers/DWD_DESIGN.md - Fact table join patterns
-- docs/layers/DWS_DESIGN.md - Aggregation using dimensions
-- docs/layers/ADS_DESIGN.md - Downstream layer specifications
-- docs/standards/NAMING_CONVENTION.md - Naming standards
-- docs/standards/SQL_STANDARDS.md - SQL coding standards
+- references/ODS_DESIGN.md - Upstream source specifications
+- references/DWD_DESIGN.md - Fact table join patterns
+- references/DWS_DESIGN.md - Aggregation using dimensions
+- references/ADS_DESIGN.md - Downstream layer specifications
+- references/NAMING_CONVENTION.md - Naming standards
+- references/SQL_STANDARDS.md - SQL coding standards

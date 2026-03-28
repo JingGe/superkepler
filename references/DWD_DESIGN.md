@@ -414,9 +414,8 @@ Solution: Add salt to skewed keys; use skew join optimization
 
 14. RELATED DOCUMENTS
 
-- docs/layers/ODS_DESIGN.md - Upstream layer specifications
-- docs/layers/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
-- docs/layers/DWM_DESIGN.md - Downstream layer specifications
-- docs/layers/DIM_DESIGN.md - Dimension table specifications
-- docs/standards/NAMING_CONVENTION.md - Naming standards
-- docs/standards/SQL_STANDARDS.md - SQL coding standards
+- references/ODS_DESIGN.md - Upstream ODS layer specifications
+- references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
+- references/DWM_DESIGN.md - Downstream DWM layer specifications
+- references/NAMING_CONVENTION.md - Naming standards
+- references/SQL_STANDARDS.md - SQL coding standards

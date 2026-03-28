@@ -266,7 +266,7 @@ Solution: Use appropriate granularity; archive old partitions
 
 12. RELATED DOCUMENTS
 
-- docs/layers/DWD_DESIGN.md - Downstream layer specifications
-- docs/standards/NAMING_CONVENTION.md - Naming standards
-- docs/standards/SQL_STANDARDS.md - SQL coding standards
-- docs/operations/RETENTION_POLICY.md - Data retention guidelines
+- references/DWD_DESIGN.md - Downstream DWD layer specifications
+- references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
+- references/NAMING_CONVENTION.md - Naming standards
+- references/SQL_STANDARDS.md - SQL coding standards

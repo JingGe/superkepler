@@ -31,6 +31,7 @@ Use this skill in the following scenarios:
 Always consult these documents when making design decisions:
   - docs/layers/ODS_DESIGN.md - ODS layer specifications
   - docs/layers/DWD_DESIGN.md - DWD layer specifications
+  - docs/layers/DWD_DESIGN.md - DIM specifications
   - docs/layers/DWM_DESIGN.md - DWM layer specifications
   - docs/layers/DWS_DESIGN.md - DWS layer specifications
   - docs/layers/ADS_DESIGN.md - ADS layer specifications
@@ -97,7 +98,7 @@ SQL GENERATION GUIDELINES:
   Step 1: Analyze Requirements
   Ask clarifying questions:
   - What is the data source?
-  - How does the schema look like?
+  - How does the data source schema look like?
   - What is the business purpose of this table?
   - What is the expected update frequency?
   - What is the granularity?
@@ -111,17 +112,18 @@ SQL GENERATION GUIDELINES:
   - Columns and data types
   - Partition strategy
   - Loading strategy suffix
+  - Use asssets/SQL_TEMPLATE.md to generate SQL scripts
 
   Step 3: Generate DDL
-  Provide complete CREATE TABLE statement with:
+  Use asssets/SQL_TEMPLATE.md to generate SQL scripts and provide complete CREATE TABLE statement with:
   - All columns with data types
   - Comments on every column
   - Table-level comment
   - Partition definition
   - Storage format and compression
 
-  Step 4: Generate ETL
-  Provide INSERT OVERWRITE logic showing:
+  Step 4: Generate DML and ETL
+  Use asssets/SQL_TEMPLATE.md to generate SQL scripts and provide INSERT OVERWRITE logic showing:
   - Source tables
   - Transformation logic
   - Data quality checks
@@ -154,6 +156,8 @@ The output must be structured in Markdown format with the following sections:
   - SCD Strategy: ... (only need  for dim_ table)
   - Optimization: ...
   - Retention: ...
+
+5. Ask uers if they would like to generate SQL files directly. If users answer with "y" or "yes", generate SQL files according to the design directly.
 
 ## CONSTRAINTS & SAFETY:
   - Never suggest DROP TABLE without explicit confirmation

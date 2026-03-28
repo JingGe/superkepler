@@ -458,8 +458,8 @@ WHEN NOT MATCHED THEN
 13. RELATED DOCUMENTS
 ---------------------
 
-- docs/layers/ODS_DESIGN.md - ODS layer specifications
-- docs/layers/DWD_DESIGN.md - DWD layer specifications
-- docs/layers/DWS_DESIGN.md - DWS layer specifications
-- docs/standards/NAMING_CONVENTION.md - Naming standards
-- docs/operations/ETL_OPERATIONS.md - ETL operations guide
+- references/ODS_DESIGN.md - ODS layer specifications
+- references/DWD_DESIGN.md - DWD layer specifications
+- references/DIM_DESIGN.md - DIM layer specifications
+- references/DWS_DESIGN.md - DWS layer specifications
+- references/NAMING_CONVENTION.md - Naming standards

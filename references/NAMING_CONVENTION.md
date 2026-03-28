@@ -345,9 +345,10 @@ full: Static Load
 14. RELATED DOCUMENTS
 
 
-- docs/layers/ODS_DESIGN.md - ODS layer specifications
-- docs/layers/DWD_DESIGN.md - DWD layer specifications
-- docs/layers/DWM_DESIGN.md - DWM layer specifications
-- docs/layers/DWS_DESIGN.md - DWS layer specifications
-- docs/layers/ADS_DESIGN.md - ADS layer specifications
-- docs/standards/SQL_STANDARDS.md - SQL coding standards
+- references/ODS_DESIGN.md - ODS layer specifications
+- references/DWD_DESIGN.md - DWD layer specifications
+- references/DIM_DESIGN.md - DIM layer specifications
+- references/DWM_DESIGN.md - DWM layer specifications
+- references/DWS_DESIGN.md - DWS layer specifications
+- references/ADS_DESIGN.md - ADS layer specifications
+- references/SQL_STANDARDS.md - SQL coding standards
