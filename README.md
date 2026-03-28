@@ -56,32 +56,34 @@ This is the fastest way to keep the skill updated via the command line.
 ### Method 2: /plugin in Claude Code  (Recommended)
 
 To install a skill from a GitHub repo using the slash command, follow these steps:
- 1. Add the Repository as a Marketplace
+
+ 1. **Add the Repository as a Marketplace:**
 
  Claude Code needs to index the repository first. Run this command inside your terminal session:
-    ```bash
-    /plugin marketplace add JingGe/data-modeling-skill
-    ```
 
- 2. Install the Skill
+   ```bash
+   /plugin marketplace add JingGe/data-modeling-skill
+   ```
+
+ 2. **Install the Skill:**
 
  Once added, you install the specific plugin from that marketplace:
 Bash
 
-    ```bash
-    /plugin install data-modeling-skill@JingGe
-    ```
+   ```bash
+   /plugin install data-modeling-skill@JingGe
+   ```
 
  (The @JingGe suffix ensures you are pulling from the correct marketplace alias).
 
- 3. Activate the Skill
+ 3. **Activate the Skill:**
 
  For the changes to take effect immediately without restarting the CLI:
 Bash
 
-    ```bash
-    /reload-plugins
-    ```
+   ```bash
+   /reload-plugins
+   ```
 
 ### Method 3: Manual Installation
 
