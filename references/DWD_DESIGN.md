@@ -1,7 +1,7 @@
 # DWD LAYER DESIGN DOCUMENT
 
 Document ID: DWD-DESIGN  
-Version: 1.0.0  
+Version: 1.0.2  
 Last Updated: 2026-03-22  
 Author: Jing Ge https://github.com/JingGe  
 

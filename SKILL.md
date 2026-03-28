@@ -2,7 +2,8 @@
 name: data-modeling-skill
 description: Trigger this skill when users ask data warehouse modeling designs; ask layered data modeling like medallion architecture, kimball, and Alibaba's OneData; and ask production-ready SQL code generation.
 metadata: 
-  version: 1.0.1
+  version: 1.0.2
+  Last Updated: 2026-03-29 
   Author: Jing Ge https://github.com/JingGe
 ---
 
@@ -12,10 +13,11 @@ This Data Modeling skill enables the design of structured, scalable, and efficie
 
 The skill ensures that all models adhere to the established naming conventions, layer responsibilities, and SQL standards defined in the architecture documentation. It bridges the gap between business needs and technical implementation by defining clear relationships, keys, and metrics.
 
-If users are using Spark or Databricks and want to use the Medallion terminology, use the following mapping:
+## Medallion Architecture Mapping
+If users are using Spark or Databricks and confirmed to use the Medallion terminology, use the following mapping:
 
   - Bronze = ODS (Raw landing)
-  - Silver = DWD (Atomic, cleaned rows)
+  - Silver = DWD / DWM / DIM (Atomic, cleaned rows)
   - Gold = DWS / ADS (Aggregates and KPI tables)
 
 ## When to use this
@@ -110,6 +112,7 @@ SQL GENERATION GUIDELINES:
   - What is the granularity?
   - Do we need to track historical changes (SCD)?(only used for dim_ table)
   - Which data platform will be used, e.g. Databricks? (make sure all generated SQL will stick to the standard of the selected data platform)
+  - Make sure user confirmed whether medallion architecture be used. If yes, use the Medallion Architecture Mapping.
 
   Step 2: Design Architecture
   Propose:
