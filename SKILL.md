@@ -2,7 +2,7 @@
 name: data-modeling-skill
 description: Trigger this skill when users ask data warehouse modeling designs; ask layered data modeling like medallion architecture, kimball, and Alibaba's OneData; and ask production-ready SQL code generation.
 metadata: 
-  version: 1.0.0
+  version: 1.0.1
   Author: Jing Ge https://github.com/JingGe
 ---
 
@@ -11,6 +11,12 @@ metadata:
 This Data Modeling skill enables the design of structured, scalable, and efficient data schemas aligned with the layered data warehouse architecture (ODS, DWD, DWM, DWS, ADS). This skill translates business requirements into logical and physical data models, ensuring data integrity, query performance, and maintainability. It encompasses dimensional modeling, normalization, slowly changing dimension (SCD) strategies, and grain definition.
 
 The skill ensures that all models adhere to the established naming conventions, layer responsibilities, and SQL standards defined in the architecture documentation. It bridges the gap between business needs and technical implementation by defining clear relationships, keys, and metrics.
+
+If users are using Spark or Databricks and want to use the Medallion terminology, use the following mapping:
+
+  - Bronze = ODS (Raw landing)
+  - Silver = DWD (Atomic, cleaned rows)
+  - Gold = DWS / ADS (Aggregates and KPI tables)
 
 ## When to use this
 
