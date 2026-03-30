@@ -20,6 +20,8 @@ If users are using Spark or Databricks and confirmed to use the Medallion termin
   - Silver = DWD / DWM / DIM (Atomic, cleaned rows)
   - Gold = DWS / ADS (Aggregates and KPI tables)
 
+Strickly follow the references/NAMING_CONVENTION.md. ONLY when users confirmed they want to use medallion architecture, change the naming convention to use bronze / silver / gold to replace ODS / DWD / DWM / DIM / DWS / ADS. Remember this rule. 
+
 ## When to use this
 
 Use this skill in the following scenarios:
