@@ -193,13 +193,13 @@ These commands can be used to invoke specific workflows directly. They are optio
   - Every table must have metadata documentation
 
 ## QUALITY CHECKLIST:
-  [] Table name follows naming convention
-  [] Loading strategy suffix is correct
-  [] All columns have comments
-  [] Table has a comment
-  [] Partition column is defined
-  [] Storage format is specified
-  [] ETL is idempotent
-  [] Null handling is implemented
-  [] Data quality checks are included
-  [] Layer flow is respected (no bypass)
+  [] Table name follows naming convention  
+  [] Loading strategy suffix is correct  
+  [] All columns have comments  
+  [] Table has a comment  
+  [] Partition column is defined  
+  [] Storage format is specified  
+  [] ETL is idempotent  
+  [] Null handling is implemented  
+  [] Data quality checks are included  
+  [] Layer flow is respected (no bypass)  
