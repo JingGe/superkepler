@@ -1,5 +1,5 @@
 # Superkepler
-Superkepler is an advanced agent skill for data modeling, i.e. design and build layered data warehouse model. It is designed to transition data teams from the loose "Medallion" pattern to the rigorous ODS-DWD-DWS-ADS kepler data architecture.
+Superkepler is an advanced agent skill for data modeling, i.e. design and build layered data warehouse model. It is designed to transition data teams from the loose "Medallion" pattern to the flexible and extensible ODS-DWD-DWM-DWS-ADS kepler data architecture.
 
 While many frameworks focus purely on data cleanliness, Superkepler focuses on data structure. It automates the creation of high-performance, layered data warehouses by applying the "Laws of Dimensional Motion" to your raw data sources.
 
