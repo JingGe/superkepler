@@ -1,9 +1,9 @@
 SQL CODING STANDARDS
 
 
-Document ID: SAL-STANDARDS 
-Version: 1.0.2  
-Last Updated: 2026-03-22  
+Document ID: SQL-CODING-STANDARDS 
+version: 1.2.0   
+Last Updated: 2026-04-18  
 Author: Jing Ge https://github.com/JingGe  
 
 
@@ -322,7 +322,6 @@ INSERT INTO etl_job_log (
 );
 
 9. NAMING IN SQL
-----------------
 
 9.1 Alias Rules
 
@@ -346,7 +345,7 @@ SELECT
 FROM table;
 
 10. VERSION CONTROL
--------------------
+
 
 10.1 SQL File Organization
 
@@ -456,10 +455,12 @@ WHEN NOT MATCHED THEN
     INSERT *;
 
 13. RELATED DOCUMENTS
----------------------
 
 - references/ODS_DESIGN.md - ODS layer specifications
 - references/DWD_DESIGN.md - DWD layer specifications
+- references/DWM_DESIGN.md - DWM layer specifications
 - references/DIM_DESIGN.md - DIM layer specifications
 - references/DWS_DESIGN.md - DWS layer specifications
+- references/ADS_DESIGN.md - ADS layer specifications
 - references/NAMING_CONVENTION.md - Naming standards
+- references/STAR_SCHEMA_DESIGN.md - Star schema design specification

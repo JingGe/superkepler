@@ -2,8 +2,8 @@
 
 
 Document ID: DWS-DESIGN  
-Version: 1.0.2   
-Last Updated: 2026-03-22   
+version: 1.2.0  
+Last Updated: 2026-04-18  
 Author: Jing Ge https://github.com/JingGe    
 
 1. PURPOSE
@@ -401,4 +401,5 @@ Solution: Test boundary conditions; document window definitions
 - references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - references/ADS_DESIGN.md - Downstream ADS layer specifications
 - references/NAMING_CONVENTION.md - Naming standards
-- references/SQL_STANDARDS.md - SQL coding standards
+- references/SQL_STANDARDS.md - SQL coding standards  
+

@@ -2,8 +2,8 @@
 name: data-modeling-skill
 description: Use this skill for any data warehouse or data lakehouse design task — including layered architecture design (medallion/bronze-silver-gold, Kimball dimensional modeling, Data Vault, Alibaba OneData), schema design (star schema, snowflake schema, fact and dimension tables), SQL code generation (DDL, staging/mart layer queries, incremental logic), and data modeling best practices for platforms like BigQuery, Snowflake, Redshift, or Databricks. Trigger this even when the user doesn't use these exact terms — if they're asking how to structure, organize, or model data across layers or zones (raw, curated, trusted, serving, ODS), or want dbt models or ELT pipeline SQL, this skill applies. Also trigger on commands like "Design table for", "Generate DDL for", or "Generate ETL for".
 metadata: 
-  version: 1.1.0
-  Last Updated: 2026-04-08 
+  version: 1.2.0
+  Last Updated: 2026-04-18  
   Author: Jing Ge https://github.com/JingGe
 ---
 
@@ -29,7 +29,7 @@ Strictly follow the references/NAMING_CONVENTION.md. ONLY when users confirmed t
 Use this skill in the following scenarios:
 
 1. Design data warehouse from scratch follow professional design principles and best practices.
-2. Layered data modeling design leverage the medallion architecture, the Kimball architecture and Alibaba's OneData concept.
+2. Layered data modeling design leverage the medallion architecture, the Kimball architecture and OneData concept.
 3. New Source Integration: When ingesting data from a new source system into the ODS layer.
 4. Data model Improvement: When existing model requires to split and move sql logic into different layers to improve the flexibility, maintainability, and performance.
 5. Performance Optimization: When existing queries are slow due to poor schema design, requiring denormalization or aggregation strategies.
@@ -41,14 +41,15 @@ Use this skill in the following scenarios:
 ## REFERENCE DOCUMENTS:
 
 Always consult these documents when making design decisions:
-  - docs/layers/ODS_DESIGN.md - ODS layer specifications
-  - docs/layers/DWD_DESIGN.md - DWD layer specifications
-  - docs/layers/DIM_DESIGN.md - DIM specifications
-  - docs/layers/DWM_DESIGN.md - DWM layer specifications
-  - docs/layers/DWS_DESIGN.md - DWS layer specifications
-  - docs/layers/ADS_DESIGN.md - ADS layer specifications
-  - docs/standards/NAMING_CONVENTION.md - Naming standards
-  - docs/standards/SQL_STANDARDS.md - SQL coding standards
+  - references/ODS_DESIGN.md - ODS layer specifications
+  - references/DWD_DESIGN.md - DWD layer specifications
+  - references/DIM_DESIGN.md - DIM specifications
+  - references/DWM_DESIGN.md - DWM layer specifications
+  - references/DWS_DESIGN.md - DWS layer specifications
+  - references/ADS_DESIGN.md - ADS layer specifications
+  - references/NAMING_CONVENTION.md - Naming standards
+  - references/SQL_STANDARDS.md - SQL coding standards
+  - references/STAR_SCHEMA_DESIGN.md - Star schema design rules and anti-patterns (ONLY load when designing DWD, DWM, or DIM tables. DON'T apply to ODS, DWS, and ADS tables)
 
 CORE ARCHITECTURE STANDARDS:
 

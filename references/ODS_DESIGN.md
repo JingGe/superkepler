@@ -2,8 +2,8 @@
 
 
 Document ID: ODS_DESIGN  
-Version: 1.0.2  
-Last Updated: 2026-03-22  
+version: 1.2.0  
+Last Updated: 2026-04-18  
 Author: Jing Ge https://github.com/JingGe  
 
 
@@ -269,4 +269,4 @@ Solution: Use appropriate granularity; archive old partitions
 - references/DWD_DESIGN.md - Downstream DWD layer specifications
 - references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - references/NAMING_CONVENTION.md - Naming standards
-- references/SQL_STANDARDS.md - SQL coding standards
+- references/SQL_STANDARDS.md - SQL coding standards  

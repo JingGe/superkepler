@@ -2,8 +2,8 @@
 
 
 Document ID: DWM-DESIGN  
-Version: 1.0.2  
-Last Updated: 2026-03-22  
+version: 1.2.0  
+Last Updated: 2026-04-18  
 Author: Jing Ge https://github.com/JingGe    
  
 1. PURPOSE
@@ -355,11 +355,15 @@ Solution: Assign business logic ownership to domain teams
 Pitfall: Version Drift  
 Solution: Version business logic; document changes  
 
-14. RELATED DOCUMENTS
+14. Star Schema
 
+See references/STAR_SCHEMA_DESIGN.md for grain and measure definitions.
+
+15. RELATED DOCUMENTS
 
 - references/DWD_DESIGN.md - Upstream DWD layer specifications
 - references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - references/DWS_DESIGN.md - Downstream DWS layer specifications
 - references/NAMING_CONVENTION.md - Naming standards
 - references/SQL_STANDARDS.md - SQL coding standards
+- references/STAR_SCHEMA_DESIGN.md - Star schema design specification

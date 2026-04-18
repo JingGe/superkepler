@@ -2,8 +2,8 @@ ADS LAYER DESIGN DOCUMENT
 
 
 Document ID: ADS-DESIGN  
-Version: 1.0.2 
-Last Updated: 2026-03-22  
+version: 1.2.0  
+Last Updated: 2026-04-18  
 Author: Jing Ge https://github.com/JingGe  
 
 1. PURPOSE
@@ -458,7 +458,6 @@ DON'T:
 - Ignore query performance
 
 13. COMMON PITFALLS
--------------------
 
 Pitfall: Direct ODS Queries  
 Solution: Enforce layer architecture; implement query routing  
@@ -505,4 +504,4 @@ To prevent the "Broken Dashboard" syndrome, ADS employs a Blue-Green Deployment:
 - references/DWS_DESIGN.md - Upstream DWS layer specifications
 - references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - references/NAMING_CONVENTION.md - Naming standards
-- references/SQL_STANDARDS.md - SQL coding standards
+- references/SQL_STANDARDS.md - SQL coding standards  

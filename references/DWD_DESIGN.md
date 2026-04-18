@@ -1,8 +1,8 @@
 # DWD LAYER DESIGN DOCUMENT
 
 Document ID: DWD-DESIGN  
-Version: 1.0.2  
-Last Updated: 2026-03-22  
+version: 1.2.0  
+Last Updated: 2026-04-18  
 Author: Jing Ge https://github.com/JingGe  
 
 1. PURPOSE
@@ -38,7 +38,6 @@ The DWD (Data Warehouse Detail) layer transforms ODS data into clean, standardiz
 - Document data classification levels
 
 3. TABLE NAMING
-
 
 Pattern: dwd_{domain}_{entity}_{suffix}
 
@@ -83,6 +82,7 @@ Examples:
 4.4 Storage Engine (Delta Lake)
 
 All DWD tables should use the DELTA format in order to support ACID transactions, Time Travel, and Change Data Feed (CDF).
+
 
 5. DDL TEMPLATE
 
@@ -412,10 +412,15 @@ Solution: Centralize business rules in documented SQL templates
 Pitfall: Data Skew on Join Keys  
 Solution: Add salt to skewed keys; use skew join optimization  
 
-14. RELATED DOCUMENTS
+14. Star Schema
+
+See references/STAR_SCHEMA_DESIGN.md for grain and measure definitions.
+
+15. RELATED DOCUMENTS
 
 - references/ODS_DESIGN.md - Upstream ODS layer specifications
 - references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - references/DWM_DESIGN.md - Downstream DWM layer specifications
 - references/NAMING_CONVENTION.md - Naming standards
 - references/SQL_STANDARDS.md - SQL coding standards
+- references/STAR_SCHEMA_DESIGN.md - Star schema design specification

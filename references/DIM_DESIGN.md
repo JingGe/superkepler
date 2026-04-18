@@ -2,8 +2,8 @@ DIM LAYER DESIGN DOCUMENT
 
 
 Document ID: DIM-DESIGN   
-Version: 1.0.2   
-Last Updated: 2026-03-23   
+version: 1.2.0  
+Last Updated: 2026-04-18  
 Author: Jing Ge https://github.com/JingGe    
  
 1. PURPOSE & SCOPE
@@ -62,7 +62,7 @@ Components:
 - suffix: df(Daily Full snapshot, standard for Reference data), scd2(History-tracking table), zip(Zipped/History-mapped table)
 
 Examples:
-- dim_user_info_
+- dim_user_info
 - dim_country_code 
 - dim_currency
 
@@ -839,9 +839,11 @@ SOLUTION: Centralize dimension ownership; require architecture review for new di
 PITFALL: Performance Degradation on Large Dimensions  
 SOLUTION: Implement broadcast hints; consider mini-dimensions; optimize partitioning  
 
+15. Star Schema
 
-15. RELATED DOCUMENTS
+See references/STAR_SCHEMA_DESIGN.md for grain and measure definitions.
 
+16. RELATED DOCUMENTS
 
 - references/ODS_DESIGN.md - Upstream source specifications
 - references/DWD_DESIGN.md - Fact table join patterns
@@ -849,3 +851,5 @@ SOLUTION: Implement broadcast hints; consider mini-dimensions; optimize partitio
 - references/ADS_DESIGN.md - Downstream layer specifications
 - references/NAMING_CONVENTION.md - Naming standards
 - references/SQL_STANDARDS.md - SQL coding standards
+- references/STAR_SCHEMA_DESIGN.md - Star schema design specification
+

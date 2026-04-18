@@ -2,8 +2,8 @@ NAMING CONVENTION STANDARD
 
 
 Document ID: NAMING-CONVENTION  
-Version: 1.0.2  
-Last Updated: 2026-03-22  
+version: 1.2.0  
+Last Updated: 2026-04-18  
 Author: Jing Ge https://github.com/JingGe  
 
 
@@ -352,3 +352,4 @@ full: Static Load
 - references/DWS_DESIGN.md - DWS layer specifications
 - references/ADS_DESIGN.md - ADS layer specifications
 - references/SQL_STANDARDS.md - SQL coding standards
+- references/STAR_SCHEMA_DESIGN.md - Star schema design specification
