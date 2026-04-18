@@ -1,9 +1,29 @@
-# supernova
-Agent skill for data modeling, i.e. design and build layered data warehouse model.
+# Superkepler
+Superkepler is an advanced agent skill for data modeling, i.e. design and build layered data warehouse model. It is designed to transition data teams from the loose "Medallion" pattern to the rigorous ODS-DWD-DWS-ADS kepler data architecture.
 
-This Data Modeling skill enables the design of structured, scalable, and efficient data schemas aligned with the layered data warehouse architecture (ODS, DWD, DWM, DWS, ADS). This skill translates business requirements into logical and physical data models, ensuring data integrity, query performance, and maintainability. It encompasses dimensional modeling, normalization, slowly changing dimension (SCD) strategies, and grain definition.
+While many frameworks focus purely on data cleanliness, Superkepler focuses on data structure. It automates the creation of high-performance, layered data warehouses by applying the "Laws of Dimensional Motion" to your raw data sources.
+
+Superkepler enables the design of structured, scalable, and efficient data schemas aligned with the layered data warehouse architecture (ODS, DWD, DWM, DWS, ADS), i.e. the kepler data architecture. This skill translates business requirements into logical and physical data models, ensuring data integrity, query performance, and maintainability. It encompasses dimensional modeling, normalization, slowly changing dimension (SCD) strategies, and grain definition.
 
 The skill ensures that all models adhere to the established naming conventions, layer responsibilities, and SQL standards defined in the architecture documentation. It bridges the gap between business needs and technical implementation by defining clear relationships, keys, and metrics.
+
+## The Superkepler Strata
+
+Superkepler organizes your data into four distinct, purposeful layers:
+
+- ODS (Operational Data Store): The "Source of Truth." A 1:1 mirror of upstream systems with technical metadata, ensuring a reliable audit trail.
+
+- DWD (Data Warehouse Detail): The "Atomic Layer." Data is cleaned, standardized, and deduplicated at the most granular level.
+
+- DWM (Data Warehouse Middle): The "Common Orbit." This is where reusable business logic lives. DWM joins related atomic tables (e.g., Order + OrderItem) into common mid-level entities that serve multiple DWS summaries.
+
+- DWS (Data Warehouse Summary): The "Star Schema." This is where high-performance Fact and Dimension tables are forged for reusable cross-domain analysis.
+
+- ADS (Application Data Service): The "Consumption Layer." Purpose-built, denormalized views optimized for specific BI tools, APIs, and stakeholders.
+
+## Why Superkepler? (The DWM Advantage)
+
+The Evolution of the Warehouse -> Medallion (Bronze/Silver/Gold) was great for simple pipelines, but it often lacks the dimensional extensibility needed for modern, large-scale analytics. Superkepler enforces the ODS-ADS standard, ensuring your data warehouse is as predictable and precise as planetary motion. Medallion's "Silver" layer is often overloaded, forced to handle both atomic cleaning and complex mid-level joins. This leads to "Silver Sprawl." Superkepler solves this by splitting Silver into DWD (Atomic) and DWM (Middle), ensuring that common logic is written once and reused everywhere.
 
 ## ACTIVATION COMMANDS:
   - "Activate data modeling Skill" - Enable this skill
@@ -17,7 +37,7 @@ The skill ensures that all models adhere to the established naming conventions, 
 Use this skill in the following scenarios:
 
 1. Design data warehouse from scratch follow professional design principles and best practices.
-2. Layered data modeling design leverage the medallion architecture, the Kimball architecture and Alibaba's OneData concept.
+2. Layered data modeling design leverage the medallion architecture, the Kimball architecture.
 3. New Source Integration: When ingesting data from a new source system into the ODS layer.
 4. Data model Improvemet: When exsiting model requires to split and move sql logic into different layers to improve the felxibility, maintainability, and performance.
 5. Performance Optimization: When existing queries are slow due to poor schema design, requiring denormalization or aggregation strategies.
