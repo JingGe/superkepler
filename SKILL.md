@@ -1,6 +1,6 @@
 ---
-name: data-modeling-skill
-description: Use this skill for any data warehouse or data lakehouse design task — including layered architecture design (medallion/bronze-silver-gold, Kimball dimensional modeling, Data Vault, Alibaba OneData), schema design (star schema, snowflake schema, fact and dimension tables), SQL code generation (DDL, staging/mart layer queries, incremental logic), and data modeling best practices for platforms like BigQuery, Snowflake, Redshift, or Databricks. Trigger this even when the user doesn't use these exact terms — if they're asking how to structure, organize, or model data across layers or zones (raw, curated, trusted, serving, ODS), or want dbt models or ELT pipeline SQL, this skill applies. Also trigger on commands like "Design table for", "Generate DDL for", or "Generate ETL for".
+name: supernova
+description: Use this skill for any data warehouse or data lakehouse design task — schema design (star schema, fact and dimension tables), including layered architecture design (medallion/bronze-silver-gold, Kimball dimensional modeling, Data Vault, Alibaba OneData), SQL code generation (DDL, staging/mart layer queries, incremental logic), and data modeling best practices for platforms like Databricks, Snowflake, Redshift, or BigQuery. Trigger this even when the user doesn't use these exact terms — if they're asking how to structure, organize, or model data across layers or zones (raw, curated, trusted, serving, ODS), or want dbt models or ELT pipeline SQL, this skill applies. Also trigger on commands like "Design table for", "Generate DDL for", or "Generate ETL for".
 metadata: 
   version: 1.2.0
   Last Updated: 2026-04-18  

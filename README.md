@@ -1,5 +1,5 @@
-# data-warehouse-modeling-skill
-Agent skill for data modeling, i.e. design and building layered data warehouse model.
+# supernova
+Agent skill for data modeling, i.e. design and build layered data warehouse model.
 
 This Data Modeling skill enables the design of structured, scalable, and efficient data schemas aligned with the layered data warehouse architecture (ODS, DWD, DWM, DWS, ADS). This skill translates business requirements into logical and physical data models, ensuring data integrity, query performance, and maintainability. It encompasses dimensional modeling, normalization, slowly changing dimension (SCD) strategies, and grain definition.
 
