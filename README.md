@@ -23,7 +23,14 @@ Superkepler organizes your data into four distinct, purposeful layers:
 
 ## Why Superkepler? (The DWM Advantage)
 
-The Evolution of the Warehouse -> Medallion (Bronze/Silver/Gold) was great for simple pipelines, but it often lacks the dimensional extensibility needed for modern, large-scale analytics. Superkepler enforces the ODS-ADS standard, ensuring your data warehouse is as predictable and precise as planetary motion. Medallion's "Silver" layer is often overloaded, forced to handle both atomic cleaning and complex mid-level joins. This leads to "Silver Sprawl." Superkepler solves this by splitting Silver into DWD (Atomic) and DWM (Middle), ensuring that common logic is written once and reused everywhere.
+**Beyond the Medallion - The Evolution of the Warehouse:**  
+Medallion (Bronze/Silver/Gold) was great for simple pipelines, but it often lacks the dimensional extensibility needed for modern, large-scale analytics. Medallion was designed for the early days of Data Lakes. **Superkepler** is built for the **Data Middle Office** era.
+
+Inspired by the methodologies that power Ant Group's and Alibaba's global ecosystem, Superkepler replaces the loose "Medallion" layers with a high-precision structure:
+
+1. **Scale-Ready Logic:** Unlike the "Silver" and "Gold" layer, which often becomes a "Data Swamp," Superkepler's **DWD**, **DWM**, **DWW**, **ADS** layers enforce strict atomicity and reuse, a technique perfected in the *Data Middle Office* to handle billions of transactions.
+2. **True Star Schemas:** By mandating a **DWS** layer, Superkepler ensures your warehouse isn't just a collection of "Clean Tables," but a functioning **Dimensional Model** optimized for high-speed queries.
+3. **Decoupled Consumption:** The **ADS** layer ensures your raw warehouse logic never "leaks" into your BI tools, maintaining a clean separation of concerns.
 
 ## ACTIVATION COMMANDS:
   - "Activate data modeling Skill" - Enable this skill
@@ -129,3 +136,10 @@ Once installed, Claude code will automatically leverage these instructions when 
  - Slash Command: /data-modeling Create a DWD layer design for the given data source.
 
  - Slash only: /data-modeling. Then you use natural language to ask the skill to design data modeling or generate SQL scripts
+
+
+## Inspiration & Heritage  
+
+**Superkepler** is an independent agent skill for the implementation of the **OneData** methodology, inspired by the architectural principles found in the book *The Big Data Road: Alibaba's Data Middle Office Practice*. 
+
+While it honors the robust ODS-DWD-DWM-DWS-ADS layering used by global-scale data organizations, Superkepler is modernized for 2026 AI-driven workflows and remains an independent tool not affiliated with Ant Group, Alibaba Group or NVIDIA Corporation.
