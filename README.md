@@ -142,4 +142,4 @@ Once installed, Claude code will automatically leverage these instructions when 
 
 **Superkepler** is an independent agent skill for the implementation of the **OneData** methodology, inspired by the architectural principles found in the book *The Big Data Road: Alibaba's Data Middle Office Practice*. 
 
-While it honors the robust ODS-DWD-DWM-DWS-ADS layering used by global-scale data organizations, Superkepler is modernized for 2026 AI-driven workflows and remains an independent tool not affiliated with Ant Group, Alibaba Group or NVIDIA Corporation.
+While it honors the robust ODS-DWD-DWM-DWS-ADS layering used by global-scale data organizations, Superkepler is modernized for 2026 AI-driven workflows and remains an independent tool not affiliated with Ant Group, Alibaba Group, or NVIDIA Corporation.
