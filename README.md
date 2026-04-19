@@ -131,11 +131,11 @@ If you prefer to manage the files locally:
 
 Once installed, Claude code will automatically leverage these instructions when you ask data-related questions. You can also trigger it explicitly:
 
- - Natural Language: "Using my data modeling skill, design a Snowflake schema for a retail analytics dashboard."
+ - Natural Language: "Using superkepler, design a star schema for a retail analytics dashboard."
 
- - Slash Command: /data-modeling Create a DWD layer design for the given data source.
+ - Slash Command: /superkepler Create a DWD layer design for the given data source.
 
- - Slash only: /data-modeling. Then you use natural language to ask the skill to design data modeling or generate SQL scripts
+ - Slash only: /superkepler. Then you use natural language to ask the skill to design data modeling or generate SQL scripts
 
 
 ## Inspiration & Heritage  
