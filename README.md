@@ -138,7 +138,7 @@ Once installed, Claude code will automatically leverage these instructions when 
  - Slash only: /superkepler. Then you use natural language to ask the skill to design data modeling or generate SQL scripts
 
 
-## Inspiration & Heritage  
+## Inspiration
 
 **Superkepler** is an independent agent skill for the implementation of the **OneData** methodology, inspired by the architectural principles found in the book *The Big Data Road: Alibaba's Data Middle Office Practice*. 
 
