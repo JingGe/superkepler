@@ -72,12 +72,12 @@ This is the fastest way to keep the skill updated via the command line.
 
 1. **Add the repository as a marketplace:**
    ```bash
-   claude plugin marketplace add JingGe/data-modeling
+   claude plugin marketplace add JingGe/superkepler
    ```
 
 2. **Install the skill:**
    ```bash
-   claude plugin install data-modeling@JingGe
+   claude plugin install superkepler@JingGe
    ```
 
 ### Method 2: /plugin in Claude Code  (Recommended)
@@ -89,7 +89,7 @@ To install a skill from a GitHub repo using the slash command, follow these step
  Claude Code needs to index the repository first. Run this command inside your terminal session:
 
    ```bash
-   /plugin marketplace add JingGe/data-modeling-skill
+   /plugin marketplace add JingGe/superkepler
    ```
 
  2. **Install the Skill:**
@@ -98,7 +98,7 @@ To install a skill from a GitHub repo using the slash command, follow these step
 Bash
 
    ```bash
-   /plugin install data-modeling-skill@JingGe
+   /plugin install superkepler@JingGe
    ```
 
  (The @JingGe suffix ensures you are pulling from the correct marketplace alias).
@@ -118,13 +118,13 @@ If you prefer to manage the files locally:
 
  1. Clone the repository:
     ```bash
-    git clone https://github.com/JingGe/data-modeling.git
+    git clone https://github.com/JingGe/superkepler.git
     ```
 
  2. Move to your global skills directory:
     ```bash
     mkdir -p ~/.claude/skills/
-    cp -r data-modeling-skill ~/.claude/skills/
+    cp -r superkepler ~/.claude/skills/
     ```
 
 ### Usage
