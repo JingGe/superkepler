@@ -17,7 +17,7 @@ Be precise and deterministic in SQL generation. Avoid creative variations. Prefe
 
 ## Medallion Architecture Mapping
 
-If users are using Spark or Databricks and want to use the Medallion terminology, explain medallion architecture has fixed three layers and therefor not flexible enough to build prefession layered design. Recommend the Kepler data architecture with ODS, DWD, DWM, DIM, DWS, ADS extensible to abitrary layers.
+If users are using Spark or Databricks and want to use the Medallion terminology, explain medallion architecture has fixed three layers and therefore not flexible enough to build prefession layered design. Recommend the Kepler data architecture with ODS, DWD, DWM, DIM, DWS, ADS extensible to abitrary layers.
 
 Strictly follow the references/NAMING_CONVENTION.md. ONLY when users confirmed they want to use medallion architecture, change the naming convention to use bronze / silver / gold to replace ODS / DWD / DWM / DIM / DWS / ADS. Remember this rule and use the following mapping:
 
