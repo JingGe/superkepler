@@ -9,7 +9,7 @@ The skill ensures that all models adhere to the established naming conventions, 
 
 ## The Superkepler Story: What's in a Name?
 
-In data engineering, names dictate philosophy. The popular Medallion Architecture (Bronze, Silver, Gold) focuses on data purity—the idea that data simply gets cleaner as it moves through the pipeline. However, the Medallion pattern does not prescribe specific schema designs, data integration methods, or enterprise relationship models.
+In data engineering, names dictate philosophy. The popular Medallion Architecture (Bronze, Silver, Gold) focuses on data purity whivh is the idea that data simply gets cleaner as it moves through the pipeline. However, the Medallion pattern does not prescribe specific schema designs, data integration methods, or enterprise relationship models.
 
 We chose the name Superkepler because modern, large-scale data ecosystems require more than just clean data. They require laws, structure, and predictable motion.
 
@@ -21,11 +21,11 @@ The name **Superkepler** references Johannes Kepler’s laws of planetary motion
 
 Why Superkepler was Chosen for this Skill:
 
-    - Predictable Orbital Flow: Data modeling shouldn't be random or left to developer whim. Superkepler implies that your data pipelines follow an optimized, strictly governed path. Every table has a definitive "orbit" (layer) where it belongs.
+- Predictable Orbital Flow: Data modeling shouldn't be random or left to developer whim. Superkepler implies that your data pipelines follow an optimized, strictly governed path. Every table has a definitive "orbit" (layer) where it belongs.
 
-    - A Nod to the "Star" Schema: It is a deliberate, structural nod to Kimball-style dimensional modeling. While Medallion might result in flat, unstructured "Golden Swamps," Superkepler explicitly builds organized galaxies of Fact and Dimension tables.
+- A Nod to the "Star" Schema: It is a deliberate, structural nod to Kimball-style dimensional modeling. While Medallion might result in flat, unstructured "Golden Swamps," Superkepler explicitly builds organized galaxies of Fact and Dimension tables.
 
-    - Enterprise Rigor with AI Velocity: Unlike generic SQL generation utilities, Superkepler stands out as an enterprise-grade agent skill. It signals to data architects that this agent skill doesn't just write code, it enforces elite data modeling architecture. By prioritizing a standardized, multi-layered schema design, Superkepler builds the core data foundation (clean and dimensionally modeled datasets) required to make downstream analytical, AI tools, and generic text-to-SQL agents effective.
+- Enterprise Rigor with AI Velocity: Unlike generic SQL generation utilities, Superkepler stands out as an enterprise-grade agent skill. It signals to data architects that this agent skill doesn't just write code, it enforces elite data modeling architecture. By prioritizing a standardized, multi-layered schema design, Superkepler builds the core data foundation (clean and dimensionally modeled datasets) required to make downstream analytical, AI tools, and generic text-to-SQL agents effective.
 
 ## The Superkepler Strata
 
