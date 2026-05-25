@@ -2,8 +2,7 @@ ADS LAYER DESIGN DOCUMENT
 
 
 Document ID: ADS-DESIGN  
-version: 1.2.0  
-Last Updated: 2026-04-18  
+Last Updated: 2026-05-25    
 Author: Jing Ge https://github.com/JingGe  
 
 1. PURPOSE
