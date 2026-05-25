@@ -44,7 +44,7 @@ Superkepler organizes your data into four distinct, purposeful layers:
 ## Why Superkepler?
 
 **Beyond the Medallion - The Evolution of the Warehouse:**  
-Medallion (Bronze/Silver/Gold) was great for simple pipelines, but it often lacks the dimensional extensibility needed for modern, large-scale analytics. Medallion was designed for the early days of Data Lakes. **Superkepler** is built for the **Data Middle Office** era.
+Medallion (Bronze/Silver/Gold) was great for simple pipelines, but it often lacks the dimensional extensibility needed for modern, large-scale analytics. Medallion was designed for the early days of Data Lakes. **Superkepler** is built for the Lakehouse era with professional data modeling at enerprise level.
 
 Inspired by the methodologies that power Ant Group's and Alibaba's global ecosystem, Superkepler replaces the loose "Medallion" layers with a high-precision structure:
 
@@ -74,7 +74,7 @@ The Medallion architecture (Bronze, Silver, Gold) categorizes data by data quali
 
 Use this skill in the following scenarios:
 
-1. Design data warehouse from scratch follow professional design principles and best practices.
+1. Design lakehouse or data warehouse from scratch follow professional design principles and best practices.
 2. Layered data modeling design leverage the medallion architecture, the Kimball architecture.
 3. New Source Integration: When ingesting data from a new source system into the ODS layer.
 4. Data model Improvemet: When exsiting model requires to split and move sql logic into different layers to improve the felxibility, maintainability, and performance.
