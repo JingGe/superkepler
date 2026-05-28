@@ -96,130 +96,30 @@ Use this skill in the following scenarios:
 
 ## Installation
 
-You can integrate this skill into your Claude environment using one of the methods below.
-
-### Method 1: Claude Code CLI (Recommended)
-This is the fastest way to keep the skill updated via the command line.
-
-1. **Add the repository as a marketplace:**
-   ```bash
-   claude plugin marketplace add JingGe/superkepler
-   ```
-
-2. **Install a specific version (Stable):**
-
-To ensure your data modeling logic stays consistent, install from a tagged release:
-
-   ```bash
-   claude plugin install superkepler@JingGe --version v1.2.0
-   ```
-
-Omit --version to track the latest commits on the default branch (Experimental).
-
- 3. **Activate the Skill:**
-
-For the changes to take effect immediately without restarting the CLI:
-Bash
-
-   ```bash
-   /reload-plugins
-   ```
-
-### Method 2: /plugin in Claude Code  (Recommended)
-
-To install a skill from a GitHub repo using the slash command, follow these steps:
-
- 1. **Add the Repository as a Marketplace:**
-
- Claude Code needs to index the repository first. Run this command inside your terminal session:
-
-   ```bash
-   /plugin marketplace add JingGe/superkepler
-   ```
-
- 2. **Install the Skill:**
-
- Once added, you install the specific plugin from that marketplace:
-Bash
-
-   ```bash
-   /plugin install superkepler@JingGe --version v1.2.0
-   ```
-
- (The @JingGe suffix ensures you are pulling from the correct marketplace alias).
-
- Omit --version to track the latest commits on the default branch (Experimental).
-
- 3. **Activate the Skill:**
-
- For the changes to take effect immediately without restarting the CLI:
-Bash
-
-   ```bash
-   /reload-plugins
-   ```
-
-### Method 3: Manual Installation
-
-If you prefer to manage the files locally:
+You can integrate this skill into your Claude environment using the Makefile.
 
  1. **Clone the repository:**
     ```bash
     git clone https://github.com/JingGe/superkepler.git
     ```
 
- 2. **Move to your global skills directory:**
+Note: you can also download a release version and extract it.
+
+ 2. **Install the skill**
     ```bash
-    mkdir -p ~/.claude/skills/
-    cp -r superkepler ~/.claude/skills/
+    cd <target_folder>/superkepler
+    make install
     ```
+
+Note: use `make unstill` to remove superkepler and use `make reinstall` to remove the old superkepler and then install current superkepler.
 
  3. **Activate the Skill:**
 
- Open a new Claude Code session or reload your current one:
+ Open a new Claude Code session and press / in your Claude TUI session. You should see the custom command registered in your namespace::
 
    ```bash
-   /reload-plugins
+   /superkepler
    ```
-
-  
-### Method 4: Manual Installation of a Release Version
-
-If you need to use a specific version of the skill without using the marketplace command, or if you are testing local changes:
-
- 1. **Download the Specific Version:**
-
- Navigate to the Releases page on GitHub and download the source code (.zip or .tar.gz) for your chosen version (e.g., v1.2.0).
-
- 2. **Extract to the Skills Directory:**
-
- Claude Code searches for skills in ~/.claude/skills/. You must extract the skill into its own named subdirectory.
-
-   ```bash
-   # Create the directory
-   mkdir -p ~/.claude/skills/superkepler
-
-   # Extract the release files into that directory
-   # (Assuming you downloaded superkepler-1.0.0.zip)
-   unzip superkepler-1.0.0.zip -d ~/.claude/skills/superkepler
-   ```
-
- 3. **Verify the File Structure:**
-
- For the manual installation to work, the SKILL.md file must be at the top level of the folder you created.
-
-   ```bash
-   ls ~/.claude/skills/superkepler/SKILL.md
-   # Should return the file path
-   ```
- 4. **Activate the Skill:**
-
- Open a new Claude Code session or reload your current one:
-
-   ```bash
-   /reload-plugins
-   ```
-
 
 ### Usage
 
