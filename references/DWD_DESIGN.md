@@ -85,6 +85,55 @@ All DWD tables should use the DELTA format in order to support ACID transactions
 
 5. DDL TEMPLATE
 
+All DWD tables use Delta Lake (see section 4.4). The Delta template is the primary standard.
+For non-Delta engines (Hive, legacy Spark), use the Parquet fallback at the end of this section.
+
+**Primary: Delta Lake (Databricks, Delta-enabled Spark)**
+
+```sql
+CREATE TABLE IF NOT EXISTS {catalog}.{schema}.dwd_{domain}_{entity}_{suffix} (
+    -- Business Keys
+    order_id              STRING          NOT NULL COMMENT 'Order ID (Business Key)',
+    user_id               STRING          COMMENT 'User ID',
+    product_id            STRING          COMMENT 'Product ID',
+    
+    -- Degenerated Dimensions
+    product_name          STRING          COMMENT 'Product Name',
+    category_l1           STRING          COMMENT 'Level 1 Category',
+    category_l2           STRING          COMMENT 'Level 2 Category',
+    shop_name             STRING          COMMENT 'Shop Name',
+    
+    -- Business Measures
+    order_amount          DECIMAL(18,2)   COMMENT 'Order Amount',
+    discount_amount       DECIMAL(18,2)   COMMENT 'Discount Amount',
+    tax_amount            DECIMAL(18,2)   COMMENT 'Tax Amount',
+    quantity              BIGINT          COMMENT 'Order Quantity',
+    
+    -- Time Dimensions
+    create_time           TIMESTAMP       COMMENT 'Order Create Time',
+    pay_time              TIMESTAMP       COMMENT 'Payment Time',
+    ship_time             TIMESTAMP       COMMENT 'Shipping Time',
+    
+    -- Status & Flags
+    order_status          STRING          COMMENT 'Order Status',
+    is_paid               BOOLEAN         COMMENT 'Is Order Paid',
+    is_refunded           BOOLEAN         COMMENT 'Is Order Refunded',
+    
+    -- Audit Fields
+    etl_time              TIMESTAMP       COMMENT 'ETL Process Time',
+    etl_batch_id          STRING          COMMENT 'ETL Batch ID'
+)
+USING DELTA
+CLUSTER BY (dt, order_status, user_id)  -- Liquid Clustering (Databricks 13.3+); use PARTITIONED BY (dt STRING) for older runtimes
+COMMENT 'DWD layer: {domain} {entity} fact table'
+TBLPROPERTIES (
+    'delta.enableChangeDataFeed' = 'true',
+    'delta.autoOptimize.optimizeWrite' = 'true'
+);
+```
+
+**Fallback: Hive / legacy Spark (non-Delta engines only)**
+
 ```sql
 CREATE TABLE IF NOT EXISTS dwd_{domain}_{entity}_{suffix} (
     -- Business Keys
@@ -122,49 +171,6 @@ COMMENT 'DWD layer: {domain} {entity} fact table'
 PARTITIONED BY (dt STRING)
 STORED AS PARQUET
 TBLPROPERTIES ('parquet.compression' = 'SNAPPY');
-```
-
-For Databricks, give the suggestion to user:
-
-```sql
-CREATE TABLE IF NOT EXISTS dwd_{domain}_{entity}_{suffix} (
-    -- Business Keys
-    order_id              STRING          COMMENT 'Order ID (Business Key)',
-    user_id               STRING          COMMENT 'User ID',
-    product_id            STRING          COMMENT 'Product ID',
-    
-    -- Degenerated Dimensions
-    product_name          STRING          COMMENT 'Product Name',
-    category_l1           STRING          COMMENT 'Level 1 Category',
-    category_l2           STRING          COMMENT 'Level 2 Category',
-    shop_name             STRING          COMMENT 'Shop Name',
-    
-    -- Business Measures
-    order_amount          DECIMAL(18,2)   COMMENT 'Order Amount',
-    discount_amount       DECIMAL(18,2)   COMMENT 'Discount Amount',
-    tax_amount            DECIMAL(18,2)   COMMENT 'Tax Amount',
-    quantity              BIGINT          COMMENT 'Order Quantity',
-    
-    -- Time Dimensions
-    create_time           TIMESTAMP       COMMENT 'Order Create Time',
-    pay_time              TIMESTAMP       COMMENT 'Payment Time',
-    ship_time             TIMESTAMP       COMMENT 'Shipping Time',
-    
-    -- Status & Flags
-    order_status          STRING          COMMENT 'Order Status',
-    is_paid               BOOLEAN         COMMENT 'Is Order Paid',
-    is_refunded           BOOLEAN         COMMENT 'Is Order Refunded',
-    
-    -- Audit Fields
-    etl_time              TIMESTAMP       COMMENT 'ETL Process Time',
-    etl_batch_id          STRING          COMMENT 'ETL Batch ID'
-)
-USING DELTA
-CLUSTER BY (dt, order_status, user_id) -- Liquid Clustering
-TBLPROPERTIES (
-    'delta.enableChangeDataFeed' = 'true',
-    'delta.autoOptimize.optimizeWrite' = 'true'
-);
 ```
 
 6. ETL PATTERNS

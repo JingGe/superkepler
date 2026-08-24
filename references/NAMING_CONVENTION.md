@@ -288,23 +288,24 @@ Start: What layer is this table?
 
 12.1 Regex Patterns for Validation
 
-# ODS Layer
-^ods_[a-z]+_[a-z]+_(di|df|hi|hf|inc)$
+# ODS Layer: ods_{source}_{table}_{suffix}
+# source and table may contain underscores (multi-word segments)
+^ods_[a-z][a-z0-9]*_[a-z][a-z0-9_]*_(di|df|hi|hf|inc)$
 
-# DIM Layer
-^dim_[a-z]+_[a-z]+_(df|full)$
+# DIM Layer: dim_{domain}_{entity}_{suffix}
+^dim_[a-z][a-z0-9]*_[a-z][a-z0-9_]*_(df|full)$
 
-# DWD Layer
-^dwd_[a-z]+_[a-z]+_(di|df|hi)$
+# DWD Layer: dwd_{domain}_{entity}_{suffix}
+^dwd_[a-z][a-z0-9]*_[a-z][a-z0-9_]*_(di|df|hi)$
 
-# DWM Layer
-^dwm_[a-z]+_[a-z]+_[a-z]+_(di|df|nd)$
+# DWM Layer: dwm_{domain}_{entity}_{processing}_{suffix}
+^dwm_[a-z][a-z0-9]*_[a-z][a-z0-9_]*_[a-z][a-z0-9_]*_(di|df|nd)$
 
-# DWS Layer
-^dws_[a-z]+_[a-z]+_(1d|7d|30d|90d|nd)_(di|nd)$
+# DWS Layer: dws_{domain}_{entity}_{granularity}_{suffix}
+^dws_[a-z][a-z0-9]*_[a-z][a-z0-9_]*_(1d|7d|30d|90d|nd)_(di|nd)$
 
-# ADS Layer
-^ads_[a-z]+_[a-z]+_(df|di|rt|full)$
+# ADS Layer: ads_{app}_{metric}_{suffix}
+^ads_[a-z][a-z0-9]*_[a-z][a-z0-9_]*_(df|di|rt|full)$
 
 12.2 CI/CD Integration
 

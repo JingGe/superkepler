@@ -149,13 +149,23 @@ WHERE is_current = TRUE OR is_current IS NULL;
 -- STEP 2.1: SET EXECUTION PARAMETERS
 -- ----------------------------------------------------------------------------
 
--- Set business date parameter (replace with your scheduler variable)
-SET var:biz_date = '2026-03-28';
-SET var:batch_id = 'ETL_20260328_001';
-SET var:source_system = 'MYSQL_PROD';
+-- Variable syntax differs by platform:
+--   Hive / Airflow / dbt:    ${biz_date}               (used throughout this template)
+--   Databricks SQL native:   ${var:biz_date}            (set with SET VAR syntax below)
+--   Databricks SQL native:   SET VAR biz_date = '...';  (Databricks 12.2+)
+--
+-- If running in Databricks, replace ${biz_date} references below with ${var:biz_date}
+-- and use the Databricks-native SET VAR syntax shown here.
 
--- Performance tuning parameters (adjust based on your engine)
+-- Hive / Airflow style (default):
+-- ${biz_date} is injected by the scheduler (e.g., Airflow: {{ ds }})
 
+-- Databricks native style (uncomment when using Databricks SQL):
+-- SET VAR biz_date    = '2026-03-28';
+-- SET VAR batch_id    = 'ETL_20260328_001';
+-- SET VAR source_system = 'MYSQL_PROD';
+
+-- Performance tuning parameters (Spark / Databricks)
 SET spark.sql.shuffle.partitions=300;
 SET spark.sql.autoBroadcastJoinThreshold=104857600;
 
@@ -358,16 +368,18 @@ GROUP BY [id_column_1];
 */
 
 -- ----------------------------------------------------------------------------
--- STEP 2.6: DATA QUALITY CHECKS (POST-LOAD)
+-- STEP 2.6: STORAGE MAINTENANCE (OPTIMIZE / VACUUM)
 -- ----------------------------------------------------------------------------
 
--- Compact small files for better read performance
+-- Compact small files for better read performance (Databricks)
+-- Note: on Databricks native SQL, replace ${biz_date} with ${var:biz_date}
 OPTIMIZE [catalog_name].[schema_name].[table_name]
-WHERE processing_date = DATE('${var:biz_date}');
+WHERE processing_date = DATE('${biz_date}');
 
--- Z-Order indexing for multi-column filtering (Spark 3.3+)
+-- Z-Order indexing for multi-column filtering (Databricks / Spark 3.3+)
+-- Prefer Liquid Clustering (CLUSTER BY) over ZORDER for new tables on Databricks 13.3+
 OPTIMIZE [catalog_name].[schema_name].[table_name]
-WHERE processing_date = DATE('${var:biz_date}')
+WHERE processing_date = DATE('${biz_date}')
 ZORDER BY (business_key_1, metric_amt_1);
 
 -- Remove old files (retention 7 days default, adjust for compliance)
@@ -425,7 +437,7 @@ GROUP BY dt;
 -- Should return exactly 1 row with the business date
 
 -- ----------------------------------------------------------------------------
--- STEP 2.7: RECONCILIATION WITH SOURCE
+-- STEP 2.8: RECONCILIATION WITH SOURCE
 -- ----------------------------------------------------------------------------
 
 -- Compare source and target counts
@@ -445,7 +457,7 @@ WHERE dt = '${biz_date}';
 -- Row counts and totals should match (or be within expected variance)
 
 -- ----------------------------------------------------------------------------
--- STEP 2.8: LOG ETL EXECUTION
+-- STEP 2.9: LOG ETL EXECUTION
 -- ----------------------------------------------------------------------------
 
 INSERT INTO etl_job_execution_log (

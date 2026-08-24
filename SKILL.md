@@ -1,6 +1,6 @@
 ---
 name: superkepler
-description: Professional data modeling architect for ODS-DWD-DWS-ADS flow. Use this skill for any data warehouse or data lakehouse design task — schema design (star schema, fact and dimension tables), including layered architecture design (medallion/bronze-silver-gold, Kimball dimensional modeling, Data Vault), SQL code generation (DDL, staging/mart layer queries, incremental logic), and data modeling best practices for platforms like Databricks, Snowflake, Redshift, or BigQuery. Trigger this even when the user doesn't use these exact terms — if they're asking how to structure, organize, or model data across layers or zones (raw, curated, trusted, serving, ODS), or want dbt models or ELT pipeline SQL, this skill applies. Also trigger on commands like "Design table for", "Generate DDL for", or "Generate ETL for".
+description: Professional data modeling architect for ODS-DWD-DWS-ADS flow. Use this skill for any data warehouse or data lakehouse design task — schema design (star schema, fact and dimension tables), including layered architecture design (medallion/bronze-silver-gold, Kimball dimensional modeling, Data Vault), SQL code generation (DDL, staging/mart layer queries, incremental logic), and data modeling best practices for platforms like Databricks, Snowflake, Redshift, or BigQuery. Trigger this even when the user doesn't use these exact terms — if they're asking how to structure, organize, or model data across layers or zones (raw, curated, trusted, serving, ODS), or want ELT pipeline SQL, this skill applies. Also trigger on commands like "Design table for", "Generate DDL for", or "Generate ETL for".
 metadata: 
   Last Updated: 2026-05-25  
   Author: Jing Ge https://github.com/JingGe
@@ -40,16 +40,16 @@ Use this skill in the following scenarios:
 
 ## REFERENCE DOCUMENTS:
 
-Always consult these documents when making design decisions:
-  - references/ODS_DESIGN.md - ODS layer specifications
-  - references/DWD_DESIGN.md - DWD layer specifications
-  - references/DIM_DESIGN.md - DIM specifications
-  - references/DWM_DESIGN.md - DWM layer specifications
-  - references/DWS_DESIGN.md - DWS layer specifications
-  - references/ADS_DESIGN.md - ADS layer specifications
-  - references/NAMING_CONVENTION.md - Naming standards
-  - references/SQL_STANDARDS.md - SQL coding standards
-  - references/STAR_SCHEMA_DESIGN.md - Star schema design rules and anti-patterns (ONLY load when designing DWD, DWM, or DIM tables. DON'T apply to ODS, DWS, and ADS tables)
+Load only the documents relevant to the layers involved in the current design task. Always load NAMING_CONVENTION.md and SQL_STANDARDS.md. Load layer-specific docs only when that layer is in scope:
+  - references/ODS_DESIGN.md - ODS layer specifications (load when designing ODS tables)
+  - references/DWD_DESIGN.md - DWD layer specifications (load when designing DWD tables)
+  - references/DIM_DESIGN.md - DIM specifications (load when designing DIM tables)
+  - references/DWM_DESIGN.md - DWM layer specifications (load when designing DWM tables)
+  - references/DWS_DESIGN.md - DWS layer specifications (load when designing DWS tables)
+  - references/ADS_DESIGN.md - ADS layer specifications (load when designing ADS tables)
+  - references/NAMING_CONVENTION.md - Naming standards (always load)
+  - references/SQL_STANDARDS.md - SQL coding standards (always load)
+  - references/STAR_SCHEMA_DESIGN.md - Star schema design rules and anti-patterns (load ONLY when designing DWD, DWM, or DIM tables; not for ODS, DWS, or ADS)
 
 CORE ARCHITECTURE STANDARDS:
 
@@ -65,9 +65,9 @@ Layer Flow (Unidirectional):
   Source Systems -> ODS -> DWD -> DWM -> DWS -> ADS -> BI/API/ML
   
 Rules:
-  - ODS -> DWD -> DWM -> DWS -> ADS (Allowed)
-  - ADS -> ODS (Never bypass layers)
-  - DWS -> ODS (Never skip DWD/DWM)
+  - ODS -> DWD -> DWM -> DWS -> ADS (allowed, unidirectional)
+  - Never query ODS directly from ADS (violates layer isolation)
+  - Never build DWS tables directly from ODS (must go through DWD/DWM)
 
 Loading Strategy Suffixes:
   - di: Daily Incremental (Once per day, T+1)
@@ -123,7 +123,7 @@ SQL GENERATION GUIDELINES:
 
   Step 2: Design Architecture
   Propose:
-  - Layer assignment(after identifying the layers, only load related design md file from the references. Don't loadd all of them.)
+  - Layer assignment (after identifying the layers, load only the relevant design docs from references — not all of them)
   - Table name (following naming convention)
   - Columns and data types
   - Partition strategy
@@ -194,13 +194,13 @@ These commands can be used to invoke specific workflows directly. They are optio
   - Every table must have metadata documentation
 
 ## QUALITY CHECKLIST:
-  [] Table name follows naming convention  
-  [] Loading strategy suffix is correct  
-  [] All columns have comments  
-  [] Table has a comment  
-  [] Partition column is defined  
-  [] Storage format is specified  
-  [] ETL is idempotent  
-  [] Null handling is implemented  
-  [] Data quality checks are included  
-  [] Layer flow is respected (no bypass)  
+  - [ ] Table name follows naming convention  
+  - [ ] Loading strategy suffix is correct  
+  - [ ] All columns have comments  
+  - [ ] Table has a comment  
+  - [ ] Partition column is defined  
+  - [ ] Storage format is specified  
+  - [ ] ETL is idempotent  
+  - [ ] Null handling is implemented  
+  - [ ] Data quality checks are included  
+  - [ ] Layer flow is respected (no bypass)  

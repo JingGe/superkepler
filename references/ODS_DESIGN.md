@@ -79,9 +79,9 @@ All ODS tables should include:
 CREATE TABLE IF NOT EXISTS ods_{source}_{table}_{suffix} (
     -- Source columns (read from the given source data schema and define a table column for each source data schema column)
     id                  STRING          COMMENT 'Source primary key',
-    {column1}            {value_type1}         COMMENT '{column1 comment}'
-    {column2}            {value_type2}         COMMENT '{column2 comment}'
-    {column3}            {value_type3}         COMMENT '{column3 comment}'
+    {column1}            {value_type1}         COMMENT '{column1 comment}',
+    {column2}            {value_type2}         COMMENT '{column2 comment}',
+    {column3}            {value_type3}         COMMENT '{column3 comment}',
 
     -- ETL metadata columns
     etl_create_time     TIMESTAMP       COMMENT 'ETL ingestion timestamp',
@@ -99,9 +99,9 @@ For Databricks, give the suggestion to user:
 CREATE TABLE IF NOT EXISTS ods_{source}_{table}_{suffix} (
     -- Source columns (read from the given source data schema and define a table column for each source data schema column)
     id                  STRING          COMMENT 'Source primary key',
-    {column1}            {value_type1}         COMMENT '{column1 comment}'
-    {column2}            {value_type2}         COMMENT '{column2 comment}'
-    {column3}            {value_type3}         COMMENT '{column3 comment}'
+    {column1}            {value_type1}         COMMENT '{column1 comment}',
+    {column2}            {value_type2}         COMMENT '{column2 comment}',
+    {column3}            {value_type3}         COMMENT '{column3 comment}',
     ...(more columns from the source data schema)
 
     -- ETL metadata columns
