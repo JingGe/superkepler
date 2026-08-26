@@ -348,37 +348,42 @@ FROM table;
 
 10.1 SQL File Organization
 
-Directory Structure:
+See assets/DATABRICKS_DW_REPO_TEMPLATE.md for the full directory structure, domain partitioning rules, and pipeline config (DAB and Lakeflow).
+
+Summary:
 sql/
-  ods/
-  dim/
-  dwd/
-  dwm/
-  dws/
-  ads/
+  ods/              -- Flat, by source system (no domain subdirs)
+  dim/              -- Flat, cross-domain shared dimensions
+  dwd/{domain}/     -- Domain subdirs start here (trade, user, traffic, ...)
+  dwm/{domain}/     -- Optional layer, same structure as dwd/
+  dws/{domain}/     -- Domain subdirs continue
+  ads/{mart}/       -- By data mart (exec, mkt, crm, ...), no domain subdirs
   common/           -- Shared CTEs and functions
-  tests/            -- Validation queries
+tests/              -- Validation queries, mirrors sql/ structure
 
 10.2 Change Documentation
 
-Add header to each SQL file:
+Add this header to every SQL file (see assets/DATABRICKS_DW_REPO_TEMPLATE.md section 2.1 for the canonical definition):
 
 -- ============================================================================
--- File: dwd_trade_order_di.sql
--- Layer: DWD
--- Description: Order fact table ETL
--- Author: {name}
--- Created: {date}
--- Last Modified: {date}
--- Version: 1.0.0
+-- Table:       {table_name}
+-- Layer:       {ODS | DIM | DWD | DWM | DWS | ADS}
+-- Domain:      {trade | user | traffic | product | finance | ...}  (DWD/DWS only)
+-- Description: {business purpose of this table}
+-- Platform:    {Databricks | Hive | Snowflake | BigQuery}
+-- Pipeline:    {DAB | Lakeflow}
+-- Author:      {name}
+-- Created:     {YYYY-MM-DD}
+-- Updated:     {YYYY-MM-DD}
+-- Version:     1.0.0
+-- ============================================================================
+-- MODIFICATION HISTORY
+-- {YYYY-MM-DD} | {author} | {description of change}
 -- ============================================================================
 
 Table Versioning: For breaking changes (removing columns), create a new table with _v2 and use a View to bridge the migration.
 
-Logic Changes: Document logic changes in the SQL Header:
-
--- MODIFICATION HISTORY
--- 2026-03-22 | Jing | Updated GMV logic to exclude returned orders
+Logic Changes: Document logic changes in the MODIFICATION HISTORY block above.
 
 11. TESTING STANDARDS
 

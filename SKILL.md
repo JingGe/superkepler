@@ -28,8 +28,9 @@ Strictly follow the references/NAMING_CONVENTION.md. ONLY when users confirmed t
 
 Use this skill in the following scenarios:
 
-1. Design data warehouse from scratch follow professional design principles and best practices.
-2. Layered data modeling design leverage the medallion architecture, the Kimball architecture.
+1. New Data Warehouse Repository: When creating a new DWH project from scratch — generates directory structure, databricks.yml (DAB or Lakeflow), and example SQL files per layer.
+2. Design data warehouse from scratch follow professional design principles and best practices.
+3. Layered data modeling design leverage the medallion architecture, the Kimball architecture.
 3. New Source Integration: When ingesting data from a new source system into the ODS layer.
 4. Data model Improvement: When existing model requires to split and move sql logic into different layers to improve the flexibility, maintainability, and performance.
 5. Performance Optimization: When existing queries are slow due to poor schema design, requiring denormalization or aggregation strategies.
@@ -41,6 +42,7 @@ Use this skill in the following scenarios:
 ## REFERENCE DOCUMENTS:
 
 Load only the documents relevant to the layers involved in the current design task. Always load NAMING_CONVENTION.md and SQL_STANDARDS.md. Load layer-specific docs only when that layer is in scope:
+  - assets/DATABRICKS_DW_REPO_TEMPLATE.md - Data warehouse repo structure, DAB and Lakeflow configs (load ONLY when creating a new data warehouse repository)
   - references/ODS_DESIGN.md - ODS layer specifications (load when designing ODS tables)
   - references/DWD_DESIGN.md - DWD layer specifications (load when designing DWD tables)
   - references/DIM_DESIGN.md - DIM specifications (load when designing DIM tables)
@@ -109,7 +111,17 @@ SQL GENERATION GUIDELINES:
 ## INTERACTION WORKFLOW:
 
   Step 1: Analyze Requirements
-  Interactive mode: Ask clarifying questions before proceeding:
+
+  If the user is creating a NEW DATA WAREHOUSE REPOSITORY, load assets/DATABRICKS_DW_REPO_TEMPLATE.md and ask:
+  - What is the project name?
+  - Which business domains are in scope? (e.g. trade, user, traffic, product, finance)
+  - Which data marts are in scope for ADS? (e.g. exec, mkt, crm, ops)
+  - Is the DWM layer needed?
+  - Do you want to generate a databricks.yml pipeline config? (optional — skip to focus on SQL source code only)
+    - If yes: DAB (Databricks Asset Bundles) or Lakeflow?
+  Then generate the directory structure and example SQL files per layer. If pipeline config was requested, also generate databricks.yml following assets/DATABRICKS_DW_REPO_TEMPLATE.md exactly.
+
+  Otherwise (table design), interactive mode: Ask clarifying questions before proceeding:
   - What is the data source?
   - How does the data source schema look like?
   - What is the business purpose of this table?
@@ -181,6 +193,7 @@ Ask users if they would like to generate SQL files directly. If users answer wit
 These commands can be used to invoke specific workflows directly. They are optional — the skill also triggers automatically from context.
 
   - "Activate data modeling Skill" — Enable this skill
+  - "Create new data warehouse repo" — Generate repo structure + databricks.yml (load assets/DATABRICKS_DW_REPO_TEMPLATE.md)
   - "Design table for [requirement]" — Start table design workflow
   - "Generate DDL for [table_name]" — Generate CREATE TABLE statement
   - "Generate ETL for [source] -> [target]" — Generate transformation SQL
