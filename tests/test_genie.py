@@ -103,3 +103,113 @@ def test_format_result_empty():
     from scripts.genie import format_result
     output = format_result([], [], truncated=False)
     assert "0 rows" in output.lower() or "no rows" in output.lower()
+
+
+# --- cmd_ask tests covering the fixed attachments-based path ---
+
+def _make_genie_msg(summary=None, sql=None, statement_id=None):
+    """Build a mock GenieMessage with attachments."""
+    from unittest.mock import MagicMock
+    msg = MagicMock()
+    attachments = []
+
+    if summary:
+        text_att = MagicMock()
+        text_att.text.content = summary
+        text_att.query = None
+        attachments.append(text_att)
+
+    if sql or statement_id:
+        query_att = MagicMock()
+        query_att.text = None
+        query_att.query.query = sql
+        query_att.query.statement_id = statement_id
+        attachments.append(query_att)
+
+    msg.attachments = attachments
+    return msg
+
+
+def test_cmd_ask_prints_summary_from_attachments(capsys):
+    from unittest.mock import MagicMock, patch
+    import argparse
+    from scripts.genie import cmd_ask
+
+    msg = _make_genie_msg(summary="Total orders: 42")
+    args = argparse.Namespace(space_id="abc123", question="How many orders?")
+
+    with patch("scripts.genie.load_config", return_value={"host": "https://x", "token": "t", "warehouse_id": None}):
+        with patch("scripts.genie.WorkspaceClient") as MockClient:
+            MockClient.return_value.genie.start_conversation_and_wait.return_value = msg
+            cmd_ask(args)
+
+    out = capsys.readouterr().out
+    assert "Total orders: 42" in out
+    assert "Genie Summary" in out
+
+
+def test_cmd_ask_prints_sql_from_attachments(capsys):
+    from unittest.mock import MagicMock, patch
+    import argparse
+    from scripts.genie import cmd_ask
+
+    msg = _make_genie_msg(sql="SELECT COUNT(*) FROM orders", statement_id=None)
+    # No statement_id → no results fetch
+    msg.attachments[0].query.statement_id = None
+    args = argparse.Namespace(space_id="abc123", question="Count orders")
+
+    with patch("scripts.genie.load_config", return_value={"host": "https://x", "token": "t", "warehouse_id": None}):
+        with patch("scripts.genie.WorkspaceClient") as MockClient:
+            MockClient.return_value.genie.start_conversation_and_wait.return_value = msg
+            cmd_ask(args)
+
+    out = capsys.readouterr().out
+    assert "SELECT COUNT(*)" in out
+    assert "Generated SQL" in out
+
+
+def test_cmd_ask_fetches_results_via_statement_id(capsys):
+    from unittest.mock import MagicMock, patch
+    import argparse
+    from scripts.genie import cmd_ask
+
+    msg = _make_genie_msg(sql="SELECT id FROM t", statement_id="stmt-001")
+    args = argparse.Namespace(space_id="abc123", question="Show ids")
+
+    col = MagicMock()
+    col.name = "id"
+    stmt_result = MagicMock()
+    stmt_result.manifest.schema.columns = [col]
+    stmt_result.manifest.truncated = False
+    stmt_result.result.data_array = [["1"], ["2"]]
+
+    with patch("scripts.genie.load_config", return_value={"host": "https://x", "token": "t", "warehouse_id": None}):
+        with patch("scripts.genie.WorkspaceClient") as MockClient:
+            client = MockClient.return_value
+            client.genie.start_conversation_and_wait.return_value = msg
+            client.statement_execution.get_statement.return_value = stmt_result
+            cmd_ask(args)
+
+    out = capsys.readouterr().out
+    assert "Results" in out
+    assert "1" in out and "2" in out
+    client.statement_execution.get_statement.assert_called_once_with(statement_id="stmt-001")
+
+
+def test_cmd_ask_no_statement_response_attribute_does_not_crash(capsys):
+    """Regression: old code crashed when query_result.statement_response didn't exist."""
+    from unittest.mock import MagicMock, patch
+    import argparse
+    from scripts.genie import cmd_ask
+
+    msg = MagicMock()
+    msg.attachments = []  # No attachments — minimal response
+    args = argparse.Namespace(space_id="abc123", question="Anything")
+
+    with patch("scripts.genie.load_config", return_value={"host": "https://x", "token": "t", "warehouse_id": None}):
+        with patch("scripts.genie.WorkspaceClient") as MockClient:
+            MockClient.return_value.genie.start_conversation_and_wait.return_value = msg
+            cmd_ask(args)  # Must not raise
+
+    out = capsys.readouterr().out
+    assert "superkepler" in out

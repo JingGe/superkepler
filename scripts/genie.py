@@ -154,23 +154,38 @@ def cmd_ask(args) -> None:
     except Exception as e:
         sys.exit(f"Genie did not respond: {e}\nTry again or use the `sql` subcommand.")
 
-    if msg.content:
-        print("=== Genie Summary ===")
-        print(msg.content)
+    # Print text attachments (summary / explanation)
+    for attachment in (msg.attachments or []):
+        if attachment.text and attachment.text.content:
+            print("=== Genie Summary ===")
+            print(attachment.text.content)
 
-    if msg.query_result and msg.query_result.statement_response:
-        stmt = msg.query_result.statement_response
-        if stmt.statement:
+    # Print query attachments (generated SQL + results)
+    for attachment in (msg.attachments or []):
+        if not attachment.query:
+            continue
+        qa = attachment.query
+        if qa.query:
             print("\n=== Generated SQL ===")
-            print(stmt.statement)
-        manifest = stmt.manifest
-        result = stmt.result
-        columns = [col.name for col in (manifest.schema.columns if manifest and manifest.schema else [])]
-        rows = [list(row) for row in (result.data_array or [])] if result else []
-        truncated = bool(manifest.truncated) if manifest else False
-        if columns:
-            print("\n=== Results ===")
-            print(format_result(columns, rows, truncated))
+            print(qa.query)
+
+        # Fetch results via statement_execution if we have a statement_id
+        if qa.statement_id:
+            try:
+                stmt = w.statement_execution.get_statement(statement_id=qa.statement_id)
+                manifest = stmt.manifest
+                result = stmt.result
+                columns = [
+                    col.name
+                    for col in (manifest.schema.columns if manifest and manifest.schema else [])
+                ]
+                rows = [list(row) for row in (result.data_array or [])] if result else []
+                truncated = bool(manifest.truncated) if manifest else False
+                if columns:
+                    print("\n=== Results ===")
+                    print(format_result(columns, rows, truncated))
+            except Exception as e:
+                print(f"\n(Could not fetch query results: {e})")
 
     print("\nWant to use these results to design a data model? Type `/superkepler` to continue.")
 
