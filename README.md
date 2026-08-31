@@ -10,7 +10,7 @@ The skill ensures that all models adhere to the established naming conventions, 
 
 ## The Superkepler Story: What's in a Name?
 
-In data engineering, names dictate philosophy. The popular Medallion Architecture (Bronze, Silver, Gold) focuses on data purity whivh is the idea that data simply gets cleaner as it moves through the pipeline. However, the Medallion pattern does not prescribe specific schema designs, data integration methods, or enterprise relationship models.
+In data engineering, names dictate philosophy. The popular Medallion Architecture (Bronze, Silver, Gold) focuses on data purity which is the idea that data simply gets cleaner as it moves through the pipeline. However, the Medallion pattern does not prescribe specific schema designs, data integration methods, or enterprise relationship models.
 
 We chose the name Superkepler because modern, large-scale data ecosystems require more than just clean data. They require laws, structure, and predictable motion.
 
@@ -45,11 +45,11 @@ Superkepler organizes your data into four distinct, purposeful layers:
 ## Why Superkepler?
 
 **Beyond the Medallion - The Evolution of the Warehouse:**  
-Medallion (Bronze/Silver/Gold) was great for simple pipelines, but it often lacks the dimensional extensibility needed for modern, large-scale analytics. Medallion was designed for the early days of Data Lakes. **Superkepler** is built for the Lakehouse era with professional data modeling at enerprise level.
+Medallion (Bronze/Silver/Gold) was great for simple pipelines, but it often lacks the dimensional extensibility needed for modern, large-scale analytics. Medallion was designed for the early days of Data Lakes. **Superkepler** is built for the Lakehouse era with professional data modeling at enterprise level.
 
 Inspired by the methodologies that power Ant Group's and Alibaba's global ecosystem, Superkepler replaces the loose "Medallion" layers with a high-precision structure:
 
-1. **Scale-Ready Logic:** Unlike the "Silver" and "Gold" layer, which often becomes a "Data Swamp," Superkepler's **DWD**, **DWM**, **DWW**, **ADS** layers enforce strict atomicity and reuse, a technique perfected in the *Data Middle Office* to handle billions of transactions.
+1. **Scale-Ready Logic:** Unlike the "Silver" and "Gold" layer, which often becomes a "Data Swamp," Superkepler's **DWD**, **DWM**, **DWS**, **ADS** layers enforce strict atomicity and reuse, a technique perfected in the *Data Middle Office* to handle billions of transactions.
 2. **True Star Schemas:** By mandating a **DWS** layer, Superkepler ensures your warehouse isn't just a collection of "Clean Tables," but a functioning **Dimensional Model** optimized for high-speed queries.
 3. **Decoupled Consumption:** The **ADS** layer ensures your raw warehouse logic never "leaks" into your BI tools, maintaining a clean separation of concerns.
 
@@ -63,6 +63,34 @@ The Medallion architecture (Bronze, Silver, Gold) categorizes data by data quali
 | **Dimensional Modeling** | Optional or implicitly pushed to the Gold layer. | Enforced at the core via the DWS layer. |
 | **Logic Redundancy** | High risk of logic duplication across downstream views. | Low; intermediate logic is centralized in the DWM layer. |
 | **Downstream Performance** | Highly dependent on dynamic runtime execution paths. | Optimized through pre-calculated, flat schema definitions in the ADS layer. |
+
+## Superkepler Genie — Databricks Integration
+
+**Superkepler Genie** (`/superkepler-genie`) is a companion skill that connects Claude directly to your Databricks workspace. It complements the data modeling skill by letting you inspect live data before designing tables, validate schemas, and run SQL against your actual warehouse — all without leaving Claude.
+
+### Three modes
+
+| Mode | When to use | Trigger phrases |
+|---|---|---|
+| **ask** | Ask a natural-language question answered by a Genie space | "ask genie", "query genie", "genie space" |
+| **metadata** | Inspect column-level metadata for a Unity Catalog table | "metadata", "columns of", `catalog.schema.table` |
+| **sql** | Run a SQL statement directly against a SQL Warehouse | "run SQL", "run this query", SELECT / CREATE / SHOW |
+
+### Prerequisites
+
+`~/.databrickscfg` must contain:
+
+```ini
+[DEFAULT]
+host          = https://<workspace>.cloud.databricks.com
+token         = dapiXXXXXXXXXXXXXXXX
+warehouse_id  = abc123def456   # required for sql mode only
+```
+
+### Typical workflow
+
+1. `/superkepler-genie` — inspect source table metadata or query live data
+2. `/superkepler` — use the results to design the ODS → DWD → DWS model
 
 ## ACTIVATION COMMANDS:
   - "Activate data modeling Skill" - Enable this skill
@@ -78,7 +106,7 @@ Use this skill in the following scenarios:
 1. Design lakehouse or data warehouse from scratch follow professional design principles and best practices.
 2. Layered data modeling design leverage the medallion architecture, the Kimball architecture.
 3. New Source Integration: When ingesting data from a new source system into the ODS layer.
-4. Data model Improvemet: When exsiting model requires to split and move sql logic into different layers to improve the felxibility, maintainability, and performance.
+4. Data model Improvement: When existing model requires to split and move sql logic into different layers to improve the flexibility, maintainability, and performance.
 5. Performance Optimization: When existing queries are slow due to poor schema design, requiring denormalization or aggregation strategies.
 6. Schema Evolution: When source systems change structure, requiring updates to DWD/DIM tables and SCD handling.
 7. New Analytics Requirements: When business stakeholders request new metrics, reports, or dashboards requiring new DWS or ADS tables.
@@ -106,17 +134,21 @@ You can integrate this skill into your Claude environment using the Makefile.
 
 Note: you can also download a release version and extract it.
 
- 2. **Install the skill**
+ 2. **Install the skills**
     ```bash
     cd <target_folder>/superkepler
     make install
     ```
 
-Note: use `make unstill` to remove superkepler and use `make reinstall` to remove the old superkepler and then install current superkepler.
+    This installs both skills:
+    - `/superkepler` — data modeling and SQL generation
+    - `/superkepler-genie` — Databricks Genie integration (requires `~/.databrickscfg`)
+
+Note: use `make uninstall` to remove superkepler and use `make reinstall` to remove the old superkepler and then install current superkepler.
 
  3. **Activate the Skill:**
 
- Open a new Claude Code session and press / in your Claude TUI session. You should see the custom command registered in your namespace::
+ Open a new Claude Code session and press / in your Claude TUI session. You should see the custom command registered in your namespace:
 
    ```bash
    /superkepler
