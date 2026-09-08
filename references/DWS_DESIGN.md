@@ -8,7 +8,9 @@ Author: Jing Ge https://github.com/JingGe
 1. PURPOSE
 
 
-The DWS (Data Warehouse Service) layer provides pre-aggregated, topic-oriented wide tables to accelerate common analytical queries and ensure metric consistency across the organization. This layer serves as the "Single Source of Truth" for all KPI reporting.
+The DWS (Data Warehouse Summary) layer provides pre-aggregated, topic-oriented wide tables of additive facts to accelerate analytical queries. DWS is the authoritative source for additive metrics (counts, amounts, fixed-window aggregates) and the direct upstream of the semantic layer.
+
+DWS and the semantic layer together form the single source of truth: DWS owns additive facts; the semantic layer owns non-additive ratios, runtime time intelligence, and derived KPIs. See references/SEMANTIC_LAYER_DESIGN.md for the full boundary definition and decision framework.
 
 2. RESPONSIBILITIES
 
@@ -120,10 +122,10 @@ CREATE TABLE IF NOT EXISTS dws_{domain}_{entity}_{granularity}_{suffix} (
     fav_cnt                 BIGINT          COMMENT 'Favorite Count',
     coupon_use_cnt          BIGINT          COMMENT 'Coupons Used',
     
-    -- Derived Metrics
-    avg_order_value         DECIMAL(10,2)   COMMENT 'Average Order Value',
-    payment_conversion_rate DECIMAL(5,4)    COMMENT 'Payment Conversion Rate',
+    -- Additive Activity Metrics
     days_active             BIGINT          COMMENT 'Number of Active Days',
+    -- NOTE: Non-additive ratios (avg_order_value, conversion_rate) belong in the
+    -- semantic layer, not here. See references/SEMANTIC_LAYER_DESIGN.md section 4.1.
     
     -- Time Markers
     last_login_time         STRING          COMMENT 'Last Login Timestamp',
@@ -162,10 +164,10 @@ SELECT
     SUM(order_amt) AS order_amt,
     SUM(pay_cnt) AS pay_cnt,
     SUM(pay_amt) AS pay_amt,
-    -- Derived Metrics
-    ROUND(SUM(pay_amt) / NULLIF(SUM(pay_cnt), 0), 2) AS avg_order_value,
-    ROUND(SUM(pay_cnt)*1.0 / NULLIF(SUM(order_cnt), 0), 4) AS payment_conversion_rate,
+    -- Additive Activity Metrics
     COUNT(1) AS days_active,
+    -- avg_order_value and payment_conversion_rate are non-additive ratios —
+    -- define them in the semantic layer on top of pay_amt, pay_cnt, order_cnt above.
     -- Time Markers
     MAX(login_time) AS last_login_time,
     MAX(pay_time) AS last_pay_time,
@@ -265,15 +267,26 @@ Show skill-users the example SQL and ask them to refer to Databricks official do
 
 7.1 Metric Definitions
 
-All metrics must be defined in central catalog:
+DWS owns additive metrics only. Non-additive ratios must be defined in the semantic layer.
+
+Additive metrics (defined in DWS):
 
 | Metric                  | Definition                          | Formula
 | ------------------------| ------------------------------------| -------------------------------------------
-| GMV                     | Gross Merchandise Value             | SUM(paid_order_amount)
-| DAU                     | Daily Active Users                  | COUNT(DISTINCT user_id WHERE login_cnt > 0)
-| Conversion Rate         | Order to Payment Conversion         | pay_cnt / order_cnt
-| AOV                     | Average Order Value                 | pay_amt / pay_cnt
-| Retention Rate          | Day-N Retention                     | RETURNING_USERS / NEW_USERS
+| GMV                     | Gross Merchandise Value             | SUM(pay_amt)
+| Order Count             | Total orders placed                 | SUM(order_cnt)
+| Pay Count               | Total paid orders                   | SUM(pay_cnt)
+| DAU                     | Daily Active Users                  | SUM(login_cnt > 0 per user per day)
+| 7d / 30d Retention Count| Fixed-window retained users         | SUM(is_retained) — pre-built in DWS
+
+Non-additive metrics (defined in semantic layer — NOT in DWS):
+
+| Metric                  | Definition                          | Formula
+| ------------------------| ------------------------------------| -------------------------------------------
+| Conversion Rate         | Order to Payment Conversion         | SUM(pay_cnt) / NULLIF(SUM(order_cnt), 0)
+| AOV                     | Average Order Value                 | SUM(pay_amt) / NULLIF(SUM(pay_cnt), 0)
+| Retention Rate          | Day-N Retention Rate                | SUM(is_retained) / NULLIF(SUM(cohort_size), 0)
+| MTD / YTD Revenue       | Period-to-date GMV                  | Runtime window on SUM(pay_amt)
 
 7.2 Metric Naming
 
@@ -399,6 +412,7 @@ Solution: Test boundary conditions; document window definitions
 - references/DWM_DESIGN.md - Upstream DWM layer specifications
 - references/DIM_DESIGN.md - Master data management, SCD Type 2 history tracking, and conformed dimension governance.
 - references/ADS_DESIGN.md - Downstream ADS layer specifications
+- references/SEMANTIC_LAYER_DESIGN.md - Semantic layer boundary, decision framework, and metric view design
 - references/NAMING_CONVENTION.md - Naming standards
-- references/SQL_STANDARDS.md - SQL coding standards  
+- references/SQL_STANDARDS.md - SQL coding standards
 

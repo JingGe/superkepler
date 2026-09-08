@@ -52,6 +52,7 @@ Load only the documents relevant to the layers involved in the current design ta
   - references/NAMING_CONVENTION.md - Naming standards (always load)
   - references/SQL_STANDARDS.md - SQL coding standards (always load)
   - references/STAR_SCHEMA_DESIGN.md - Star schema design rules and anti-patterns (load ONLY when designing DWD, DWM, or DIM tables; not for ODS, DWS, or ADS)
+  - references/SEMANTIC_LAYER_DESIGN.md - Semantic layer boundary, DWS vs metric view decision framework (load when designing DWS tables or when the user asks about semantic layer, metric views, or KPI definitions)
 
 CORE ARCHITECTURE STANDARDS:
 
@@ -64,7 +65,8 @@ CORE ARCHITECTURE STANDARDS:
   - ADS (ads_): Application-specific data products. Optimized for BI/API/Reports.
 
 Layer Flow (Unidirectional):
-  Source Systems -> ODS -> DWD -> DWM -> DWS -> ADS -> BI/API/ML
+  Source Systems -> ODS -> DWD -> DWM -> DWS -> Semantic Layer -> BI/API/ML
+                                              -> ADS -> BI/API/ML (for fixed reports without semantic layer)
   
 Rules:
   - ODS -> DWD -> DWM -> DWS -> ADS (allowed, unidirectional)
