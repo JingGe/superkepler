@@ -38,7 +38,7 @@ Use this skill in the following scenarios:
 7. New Analytics Requirements: When business stakeholders request new metrics, reports, or dashboards requiring new DWS or ADS tables.
 8. Data Mart Creation: When building subject-area specific data marts for specific departments (Finance, Marketing, Operations).
 9. Refactoring: When cleaning up technical debt, inconsistent metrics, or redundant tables in the warehouse.
-10. **User Retention Cohort Analysis**: When asked to design user retention by acquisition cohort, load the `patterns/USER_RETENTION_COHORT.md` pattern and follow the template.
+10. **User Retention Cohort Analysis**: When the request contains "user retention", "user retention model", "user retention data model", "develop user retention model", "user retention cohort analysis", load the `patterns/USER_RETENTION_COHORT.md` pattern and follow the template.
 
 ## REFERENCE DOCUMENTS:
 
