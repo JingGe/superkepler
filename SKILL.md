@@ -38,6 +38,7 @@ Use this skill in the following scenarios:
 7. New Analytics Requirements: When business stakeholders request new metrics, reports, or dashboards requiring new DWS or ADS tables.
 8. Data Mart Creation: When building subject-area specific data marts for specific departments (Finance, Marketing, Operations).
 9. Refactoring: When cleaning up technical debt, inconsistent metrics, or redundant tables in the warehouse.
+10. **User Retention Cohort Analysis**: When asked to design user retention by acquisition cohort, load the `patterns/USER_RETENTION_COHORT.md` pattern and follow the template.
 
 ## REFERENCE DOCUMENTS:
 
@@ -124,6 +125,10 @@ SQL GENERATION GUIDELINES:
   Then generate the directory structure and example SQL files per layer. If pipeline config was requested, also generate databricks.yml following assets/DATABRICKS_DW_REPO_TEMPLATE.md exactly.
 
   Otherwise (table design), interactive mode: Ask clarifying questions before proceeding:
+
+  If the request is for **user retention cohort analysis**, load the pattern from `patterns/USER_RETENTION_COHORT.md` and ask the clarifying questions defined in that pattern.
+
+  General table design questions:
   - What is the data source?
   - How does the data source schema look like?
   - What is the business purpose of this table?
