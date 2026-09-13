@@ -12,6 +12,7 @@ SKILL_SRC        = SKILL.md
 SKILL_GENIE_SRC  = SKILL_GENIE.md
 REF_SRC          = references
 ASSETS_SRC       = assets
+PATTERNS_SRC     = patterns
 SCRIPTS_SRC      = scripts
 
 .PHONY: all install uninstall reinstall install-claudecode uninstall-claudecode help
@@ -34,6 +35,7 @@ install-claudecode:
 	@cp -r $(SKILL_SRC) $(CC_SKILL_DIR)/SKILL.md
 	@if [ -d "$(REF_SRC)" ]; then cp -r $(REF_SRC) $(CC_SKILL_DIR)/; fi
 	@if [ -d "$(ASSETS_SRC)" ]; then cp -r $(ASSETS_SRC) $(CC_SKILL_DIR)/; fi
+	@if [ -d "$(PATTERNS_SRC)" ]; then cp -r $(PATTERNS_SRC) $(CC_SKILL_DIR)/; fi
 	@echo "Installing $(SKILL_GENIE_NAME) skill to Claude Code global directory..."
 	@mkdir -p $(CC_GENIE_DIR)
 	@cp -r $(SKILL_GENIE_SRC) $(CC_GENIE_DIR)/SKILL.md
