@@ -16,7 +16,10 @@ flowchart TD
     A[ods_{source}_user_events<br>ODS / Raw source] --> B[dwd_user_active_di<br>DWD / Cleaned filtered active events]
     B --> C[dim_user_profile_df<br>DIM / User profile with immutable first-active cohort]
     B --> D[dws_user_retention_matrix_1d_di<br>DWS / Incremental retention matrix]
+    B --> F[dws_user_stats_1d_di<br>DWS / Daily additive user activity metrics]
     C --> D
+    F --> G[dws_user_stats_7d_nd<br>DWS / Rolling 7-day aggregation]
+    F --> H[dws_user_stats_30d_nd<br>DWS / Rolling 30-day aggregation]
     D --> E[v_ads_retention_matrix<br>ADS / Final presentation view]
 ```
 
@@ -34,7 +37,21 @@ flowchart TD
 | DWD | `dwd_user_active_di` | Fact | di (daily incremental) | Cleaned filtered active user events |
 | DIM | `dim_user_profile_df` | Dimension | df (daily full snapshot upsert) | User profile with immutable first-active cohort info |
 | DWS | `dws_user_retention_matrix_1d_di` | Aggregate | di (daily incremental) | Incremental retention counts by cohort |
+| DWS | `dws_user_stats_1d_di` | Aggregate | di (daily incremental) | Today's additive activity metrics per user |
+| DWS | `dws_user_stats_7d_nd` | Aggregate | nd (rolling) | Rolling 7-day additive metrics per user |
+| DWS | `dws_user_stats_30d_nd` | Aggregate | nd (rolling) | Rolling 30-day additive metrics per user |
 | ADS | `v_ads_retention_matrix` | View | N/A | Final view with calculated retention rates |
+
+### Window separation rule
+
+The granularity suffix in a DWS table name must match the time window of every metric in that table.
+Never mix windows in one table (e.g. `login_cnt` today alongside `pay_amt_30d`):
+
+- `dws_user_stats_1d_di` → today's activity only: `login_cnt`, `order_cnt`, `pay_amt`
+- `dws_user_stats_7d_nd` → rolling 7-day sums built from the `1d` table: `login_cnt_7d`, `order_cnt_7d`, `pay_amt_7d`
+- `dws_user_stats_30d_nd` → rolling 30-day sums built from the `1d` table: `login_cnt_30d`, `order_cnt_30d`, `pay_amt_30d`
+
+Rolling window tables (`nd`) aggregate the `1d` table — never re-scan DWD. This keeps ETL cost O(N) per window instead of O(N×window_days).
 
 ## Configuration
 Before generating, confirm with user:
@@ -141,7 +158,6 @@ WHERE p_date = '${exec_date}'
 -- ============================================================================
 -- Table:       dim_user_profile_df
 -- Layer:       DIM
--- Domain:      user
 -- Description: Conformed upsertable dimension table for user profile including first-active cohort info
 -- Platform:    Databricks
 -- Pipeline:    DAB
@@ -253,6 +269,175 @@ WHERE f.first_active_week <= DATE_TRUNC('WEEK', DATE '${exec_date}')
 GROUP BY 1, 2, 3, 4, 5;
 ```
 
+### DWS Table — Daily Stats (`sql/dws/user/dws_user_stats_1d_di.sql`)
+```sql
+-- ============================================================================
+-- Table:       dws_user_stats_1d_di
+-- Layer:       DWS
+-- Domain:      user
+-- Description: Daily additive activity metrics per user — today's grain only.
+--              Non-additive ratios (AOV, conversion_rate) belong in semantic layer.
+-- Platform:    Databricks
+-- Pipeline:    DAB
+-- Author:      {author}
+-- Created:     {date}
+-- ============================================================================
+-- MODIFICATION HISTORY
+-- {date} | {author} | Initial creation
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS ${catalog}.${schema}.dws_user_stats_1d_di (
+    user_id             STRING          NOT NULL COMMENT 'Unique user identifier',
+    login_cnt           BIGINT          COMMENT 'Number of login events today',
+    active_event_cnt    BIGINT          COMMENT 'Number of core engagement events today',
+    order_cnt           BIGINT          COMMENT 'Number of orders placed today',
+    pay_cnt             BIGINT          COMMENT 'Number of paid orders today',
+    pay_amt             DECIMAL(18,2)   COMMENT 'Total payment amount today',
+    refund_cnt          BIGINT          COMMENT 'Number of refunds today',
+    refund_amt          DECIMAL(18,2)   COMMENT 'Total refund amount today',
+    dt                  DATE            NOT NULL COMMENT 'Business date partition'
+)
+USING DELTA
+PARTITIONED BY (dt)
+CLUSTER BY (user_id)
+COMMENT 'DWS: Daily additive user activity metrics — 1-day grain, incremental'
+TBLPROPERTIES (
+    'delta.enableChangeDataFeed' = 'true',
+    'delta.autoOptimize.optimizeWrite' = 'true'
+);
+
+INSERT INTO ${catalog}.${schema}.dws_user_stats_1d_di
+REPLACE WHERE dt = '${exec_date}'
+SELECT
+    user_id,
+    COUNT(CASE WHEN event_type = 'login'      THEN 1 END) AS login_cnt,
+    COUNT(*)                                               AS active_event_cnt,
+    COUNT(CASE WHEN event_type = 'order'      THEN 1 END) AS order_cnt,
+    COUNT(CASE WHEN event_type = 'pay'        THEN 1 END) AS pay_cnt,
+    COALESCE(SUM(CASE WHEN event_type = 'pay'    THEN pay_amt    END), 0) AS pay_amt,
+    COUNT(CASE WHEN event_type = 'refund'     THEN 1 END) AS refund_cnt,
+    COALESCE(SUM(CASE WHEN event_type = 'refund' THEN refund_amt END), 0) AS refund_amt,
+    DATE '${exec_date}'                                    AS dt
+FROM ${catalog}.${schema}.dwd_user_active_di
+WHERE dt = '${exec_date}'
+  AND user_id IS NOT NULL
+GROUP BY user_id;
+```
+
+### DWS Table — 7-Day Rolling (`sql/dws/user/dws_user_stats_7d_nd.sql`)
+```sql
+-- ============================================================================
+-- Table:       dws_user_stats_7d_nd
+-- Layer:       DWS
+-- Domain:      user
+-- Description: Rolling 7-day additive metrics per user, built from 1d table.
+--              Suffix nd = N-day rolling, rebuilt daily from dws_user_stats_1d_di.
+-- Platform:    Databricks
+-- Pipeline:    DAB
+-- Author:      {author}
+-- Created:     {date}
+-- ============================================================================
+-- MODIFICATION HISTORY
+-- {date} | {author} | Initial creation
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS ${catalog}.${schema}.dws_user_stats_7d_nd (
+    user_id             STRING          NOT NULL COMMENT 'Unique user identifier',
+    login_cnt_7d        BIGINT          COMMENT 'Login count in last 7 days',
+    active_event_cnt_7d BIGINT          COMMENT 'Active event count in last 7 days',
+    order_cnt_7d        BIGINT          COMMENT 'Order count in last 7 days',
+    pay_cnt_7d          BIGINT          COMMENT 'Paid order count in last 7 days',
+    pay_amt_7d          DECIMAL(18,2)   COMMENT 'Total payment amount in last 7 days',
+    refund_cnt_7d       BIGINT          COMMENT 'Refund count in last 7 days',
+    refund_amt_7d       DECIMAL(18,2)   COMMENT 'Total refund amount in last 7 days',
+    days_active_7d      BIGINT          COMMENT 'Number of distinct active days in last 7 days',
+    dt                  DATE            NOT NULL COMMENT 'Business date partition'
+)
+USING DELTA
+PARTITIONED BY (dt)
+CLUSTER BY (user_id)
+COMMENT 'DWS: Rolling 7-day additive user activity metrics, aggregated from 1d table'
+TBLPROPERTIES (
+    'delta.autoOptimize.optimizeWrite' = 'true'
+);
+
+-- Built from the 1d table — never re-scans DWD
+INSERT INTO ${catalog}.${schema}.dws_user_stats_7d_nd
+REPLACE WHERE dt = '${exec_date}'
+SELECT
+    user_id,
+    SUM(login_cnt)          AS login_cnt_7d,
+    SUM(active_event_cnt)   AS active_event_cnt_7d,
+    SUM(order_cnt)          AS order_cnt_7d,
+    SUM(pay_cnt)            AS pay_cnt_7d,
+    SUM(pay_amt)            AS pay_amt_7d,
+    SUM(refund_cnt)         AS refund_cnt_7d,
+    SUM(refund_amt)         AS refund_amt_7d,
+    COUNT(DISTINCT dt)      AS days_active_7d,
+    DATE '${exec_date}'     AS dt
+FROM ${catalog}.${schema}.dws_user_stats_1d_di
+WHERE dt BETWEEN DATE_SUB(DATE '${exec_date}', 6) AND DATE '${exec_date}'
+  AND user_id IS NOT NULL
+GROUP BY user_id;
+```
+
+### DWS Table — 30-Day Rolling (`sql/dws/user/dws_user_stats_30d_nd.sql`)
+```sql
+-- ============================================================================
+-- Table:       dws_user_stats_30d_nd
+-- Layer:       DWS
+-- Domain:      user
+-- Description: Rolling 30-day additive metrics per user, built from 1d table.
+--              Suffix nd = N-day rolling, rebuilt daily from dws_user_stats_1d_di.
+-- Platform:    Databricks
+-- Pipeline:    DAB
+-- Author:      {author}
+-- Created:     {date}
+-- ============================================================================
+-- MODIFICATION HISTORY
+-- {date} | {author} | Initial creation
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS ${catalog}.${schema}.dws_user_stats_30d_nd (
+    user_id              STRING          NOT NULL COMMENT 'Unique user identifier',
+    login_cnt_30d        BIGINT          COMMENT 'Login count in last 30 days',
+    active_event_cnt_30d BIGINT          COMMENT 'Active event count in last 30 days',
+    order_cnt_30d        BIGINT          COMMENT 'Order count in last 30 days',
+    pay_cnt_30d          BIGINT          COMMENT 'Paid order count in last 30 days',
+    pay_amt_30d          DECIMAL(18,2)   COMMENT 'Total payment amount in last 30 days',
+    refund_cnt_30d       BIGINT          COMMENT 'Refund count in last 30 days',
+    refund_amt_30d       DECIMAL(18,2)   COMMENT 'Total refund amount in last 30 days',
+    days_active_30d      BIGINT          COMMENT 'Number of distinct active days in last 30 days',
+    dt                   DATE            NOT NULL COMMENT 'Business date partition'
+)
+USING DELTA
+PARTITIONED BY (dt)
+CLUSTER BY (user_id)
+COMMENT 'DWS: Rolling 30-day additive user activity metrics, aggregated from 1d table'
+TBLPROPERTIES (
+    'delta.autoOptimize.optimizeWrite' = 'true'
+);
+
+-- Built from the 1d table — never re-scans DWD
+INSERT INTO ${catalog}.${schema}.dws_user_stats_30d_nd
+REPLACE WHERE dt = '${exec_date}'
+SELECT
+    user_id,
+    SUM(login_cnt)          AS login_cnt_30d,
+    SUM(active_event_cnt)   AS active_event_cnt_30d,
+    SUM(order_cnt)          AS order_cnt_30d,
+    SUM(pay_cnt)            AS pay_cnt_30d,
+    SUM(pay_amt)            AS pay_amt_30d,
+    SUM(refund_cnt)         AS refund_cnt_30d,
+    SUM(refund_amt)         AS refund_amt_30d,
+    COUNT(DISTINCT dt)      AS days_active_30d,
+    DATE '${exec_date}'     AS dt
+FROM ${catalog}.${schema}.dws_user_stats_1d_di
+WHERE dt BETWEEN DATE_SUB(DATE '${exec_date}', 29) AND DATE '${exec_date}'
+  AND user_id IS NOT NULL
+GROUP BY user_id;
+```
+
 ### ADS View (`sql/ads/mkt/v_ads_retention_matrix.sql`)
 ```sql
 -- ============================================================================
@@ -335,10 +520,15 @@ JOIN cohort_size_week c
 
 ## Pipeline Execution Order
 1. **ODS**: Ingest raw user events for the day
-2. **DWD**: Clean and filter to core active events
-3. **DIM**: Upsert new users into user profile dimension (first-active data is immutable)
-4. **DWS**: Calculate incremental retention contributions for today
-5. **ADS**: Query the view for retention reports
+2. **DWD**: Clean and filter to core active events (`dwd_user_active_di`)
+3. **DIM**: Upsert new users into user profile dimension (`dim_user_profile_df` — first-active data is immutable)
+4. **DWS (parallel)**:
+   - Calculate incremental retention contributions (`dws_user_retention_matrix_1d_di`) — joins DIM
+   - Aggregate today's additive activity metrics (`dws_user_stats_1d_di`)
+5. **DWS (rolling, depends on step 4b)**:
+   - Build rolling 7-day metrics (`dws_user_stats_7d_nd`) — aggregates `1d` table, never re-scans DWD
+   - Build rolling 30-day metrics (`dws_user_stats_30d_nd`) — aggregates `1d` table, never re-scans DWD
+6. **ADS**: Query the view for retention reports (`v_ads_retention_matrix`)
 
 ## Customization Tips
 - **Filter Events**: Adjust the `event_type IN (...)` filter in DWD to select your core engagement events that define "activity"
