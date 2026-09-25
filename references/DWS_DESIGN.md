@@ -379,7 +379,8 @@ DO:
 - Document metric definitions centrally
 - Build from DWD/DWM, not ODS
 - Use incremental updates where possible
-- Maintain consistent granularity
+- Maintain consistent granularity per table — one window per table
+- Build rolling window tables (7d, 30d) by aggregating the 1d table, never by re-scanning DWD
 - Test aggregation logic thoroughly
 
 DON'T:
@@ -388,7 +389,32 @@ DON'T:
 - Skip layers for "performance"
 - Recompute everything from scratch
 - Store raw data (use DWD for that)
-- Mix granularities in one table
+- Mix granularities in one table (e.g. login_cnt today alongside pay_amt_30d)
+- Pre-compute non-additive ratios (conversion_rate, AOV) — those belong in the semantic layer
+- Store user identity descriptors (first_active_date, city_code) in DWS — those belong in DIM
+
+12.1 Window separation rule
+
+The granularity suffix in a DWS table name must match the time window of every metric
+in that table. Use separate tables per window:
+
+  dws_user_stats_1d_di   → today's grain: login_cnt, order_cnt, pay_amt
+  dws_user_stats_7d_nd   → rolling 7-day: login_cnt_7d, order_cnt_7d, pay_amt_7d
+  dws_user_stats_30d_nd  → rolling 30-day: login_cnt_30d, order_cnt_30d, pay_amt_30d
+
+Rolling nd tables aggregate the 1d table — they never re-scan DWD. Cost is O(N) per
+window regardless of window size.
+
+12.2 User state vs user profile
+
+DWS owns user STATE (what the user has done, computed daily from events):
+  login_cnt_30d, pay_amt_7d, days_active_30d, last_active_date, is_vip
+
+DIM owns user PROFILE (who the user is, immutable or slow-changing descriptors):
+  first_active_date, first_channel, country, city_code, register_date, user_level
+
+Never combine both in one table. See references/DIM_DESIGN.md section 10.2 for the
+full decision rule.
 
 13. COMMON PITFALLS
 

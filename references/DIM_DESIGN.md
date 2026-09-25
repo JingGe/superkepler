@@ -665,6 +665,28 @@ STORED AS PARQUET;
 
 10.2 User Dimension (SCD Type 2)
 
+DECISION RULE — DIM vs DWS for user data:
+
+Ask: does this column describe WHO THE USER IS, or WHAT THE USER HAS DONE?
+
+| Column               | Nature                              | Layer |
+|----------------------|-------------------------------------|-------|
+| first_active_date    | Immutable identity descriptor       | DIM   |
+| first_channel        | Immutable identity descriptor       | DIM   |
+| country, city_code   | Slow-changing descriptor (SCD)      | DIM   |
+| register_date        | Immutable identity descriptor       | DIM   |
+| user_level, segment  | Slow-changing descriptor (SCD)      | DIM   |
+| login_cnt_30d        | Computed from events, changes daily | DWS   |
+| pay_amt_7d           | Computed from events, changes daily | DWS   |
+| last_active_date     | Derived from events, changes daily  | DWS   |
+| days_active_30d      | Aggregated metric, changes daily    | DWS   |
+| is_vip               | Derived status, changes daily       | DWS   |
+
+Never mix both categories in one table. A "wide user profile" that combines
+immutable descriptors with daily behavioral metrics forces full daily recomputation
+of immutable fields and breaks the DIM→DWS join pattern (DWS joins DIM to enrich
+facts with descriptors; if descriptors are in DWS, that join cannot be expressed).
+
 MOST COMMON PATTERN WITH HISTORY TRACKING.
 ```sql
 CREATE TABLE dim_user_info_df (
